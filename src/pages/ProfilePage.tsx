@@ -109,7 +109,7 @@ export default function ProfilePage() {
       </button>
 
       <p className="text-center text-xs text-gray-400 mt-8">
-        FoodShare v1.0 · Islamabad Food Charity Initiative
+
       </p>
     </div>
   );

@@ -83,8 +83,8 @@ export default function LandingPage() {
         </div>
 
         <footer className="mt-24 text-center text-gray-400 text-sm border-t border-gray-100 pt-8">
-          <p>FoodShare — Islamabad Food Charity Initiative</p>
-          <p className="mt-1">Built with ❤️ for the community</p>
+          <p>FoodShare — </p>
+          <p className="mt-1"></p>
         </footer>
       </div>
     </div>
