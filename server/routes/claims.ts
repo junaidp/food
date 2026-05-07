@@ -1,7 +1,7 @@
 import { Router, Response } from 'express';
-import pool from '../db';
-import { AuthRequest, authMiddleware } from '../middleware/auth';
-import { getIO } from '../socket';
+import pool from '../db.js';
+import { AuthRequest, authMiddleware } from '../middleware/auth.js';
+import { getIO } from '../socket.js';
 
 const router = Router();
 

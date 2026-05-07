@@ -1,6 +1,6 @@
 import { Router, Response } from 'express';
-import pool from '../db';
-import { AuthRequest, authMiddleware, donorMiddleware } from '../middleware/auth';
+import pool from '../db.js';
+import { AuthRequest, authMiddleware, donorMiddleware } from '../middleware/auth.js';
 
 const router = Router();
 

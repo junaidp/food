@@ -3,18 +3,22 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { createServer } from 'http';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-import authRoutes from './routes/auth';
-import listingRoutes from './routes/listings';
-import claimRoutes from './routes/claims';
-import notificationRoutes from './routes/notifications';
-import ratingRoutes from './routes/ratings';
-import reportRoutes from './routes/reports';
-import adminRoutes from './routes/admin';
-import { initSocket } from './socket';
+import authRoutes from './routes/auth.js';
+import listingRoutes from './routes/listings.js';
+import claimRoutes from './routes/claims.js';
+import notificationRoutes from './routes/notifications.js';
+import ratingRoutes from './routes/ratings.js';
+import reportRoutes from './routes/reports.js';
+import adminRoutes from './routes/admin.js';
+import { initSocket } from './socket.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const httpServer = createServer(app);
