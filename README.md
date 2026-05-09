@@ -26,6 +26,13 @@ A charity food sharing app connecting donors with receivers in Islamabad. Donors
 - Monitor all listings
 - Handle reports and complaints
 
+### PWA Features (📱)
+- **Installable** - Add to home screen like a native app
+- **Offline Support** - Works without internet connection
+- **Fast Loading** - Service worker caches resources
+- **Push Notifications** - Real-time updates (coming soon)
+- **App-like Experience** - Runs in standalone mode
+
 ## Tech Stack
 - **Frontend:** React + Vite + TailwindCSS + TypeScript
 - **Backend:** Express + TypeScript
@@ -33,6 +40,7 @@ A charity food sharing app connecting donors with receivers in Islamabad. Donors
 - **Maps:** Leaflet (OpenStreetMap — free)
 - **Real-time:** Socket.IO
 - **HTTP Client:** Axios
+- **PWA:** Progressive Web App (installable on mobile)
 
 ## Project Structure
 ```
@@ -93,6 +101,28 @@ This starts both frontend (port 5173) and backend (port 3001).
 3. It auto-detects `render.yaml`
 4. Set `DATABASE_URL` env var in Render dashboard
 5. Deploy!
+
+## PWA Installation
+
+Once deployed, users can install FoodShare as a mobile app:
+
+**Android (Chrome):**
+1. Visit the website
+2. Tap the install banner or "Add to Home Screen"
+3. App appears on home screen
+
+**iOS (Safari):**
+1. Visit the website
+2. Tap Share button
+3. Select "Add to Home Screen"
+4. App appears on home screen
+
+**Desktop (Chrome/Edge):**
+1. Visit the website
+2. Click install icon in address bar
+3. Or use the install prompt
+
+See `PWA_SETUP.md` for detailed PWA configuration and testing.
 
 ## Process Flow
 1. **Donor** adds food listing → sets quantity, location, expiry

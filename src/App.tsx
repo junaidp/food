@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import Layout from './components/Layout';
 import ToastContainer from './components/ToastContainer';
+import InstallPrompt from './components/InstallPrompt';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DonorDashboard from './pages/donor/DonorDashboard';
@@ -92,6 +93,7 @@ export default function App() {
     <>
       <AppRoutes />
       <ToastContainer />
+      <InstallPrompt />
     </>
   );
 }
