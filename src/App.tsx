@@ -5,6 +5,7 @@ import ToastContainer from './components/ToastContainer';
 import InstallPrompt from './components/InstallPrompt';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import OTPVerificationPage from './pages/OTPVerificationPage';
 import DonorDashboard from './pages/donor/DonorDashboard';
 import CreateListing from './pages/donor/CreateListing';
 import DonorClaims from './pages/donor/DonorClaims';
@@ -64,6 +65,7 @@ function AppRoutes() {
       <Route path="/" element={homeRedirect()} />
       <Route path="/login" element={user ? <Navigate to="/" /> : <LoginPage />} />
       <Route path="/register" element={user ? <Navigate to="/" /> : <RegisterPage />} />
+      <Route path="/verify-otp" element={user ? <Navigate to="/" /> : <OTPVerificationPage />} />
 
       {/* Donor routes */}
       <Route path="/donor" element={<ProtectedRoute roles={['donor']}><Layout><DonorDashboard /></Layout></ProtectedRoute>} />

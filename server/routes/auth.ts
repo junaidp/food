@@ -3,10 +3,11 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import pool from '../db.js';
 import { AuthRequest, authMiddleware } from '../middleware/auth.js';
+import { generateOTP, storeOTP, sendOTP, verifyOTP, canResendOTP } from '../services/otp.js';
 
 const router = Router();
 
-// Register
+// Step 1: Register (creates user but unverified)
 router.post('/register', async (req, res) => {
   try {
     const { phone, name, role, password } = req.body;
@@ -27,9 +28,52 @@ router.post('/register', async (req, res) => {
     const passwordHash = await bcrypt.hash(password, 10);
     const result = await pool.query(
       `INSERT INTO users (phone, name, password_hash, role, is_verified)
-       VALUES ($1, $2, $3, $4, true)
-       RETURNING id, phone, name, role, is_verified, is_blocked, latitude, longitude, created_at, updated_at`,
+       VALUES ($1, $2, $3, $4, false)
+       RETURNING id, phone, name, role, is_verified`,
       [phone, name, passwordHash, role]
+    );
+
+    const user = result.rows[0];
+
+    // Generate and send OTP
+    const otp = generateOTP();
+    await storeOTP(phone, otp);
+    await sendOTP(phone, otp);
+
+    res.json({ 
+      success: true, 
+      data: { 
+        userId: user.id,
+        phone: user.phone,
+        message: 'OTP sent to your phone number. Please verify to complete registration.' 
+      } 
+    });
+  } catch (error: any) {
+    console.error('Register error:', error);
+    res.status(500).json({ success: false, error: 'Registration failed' });
+  }
+});
+
+// Step 2: Verify OTP
+router.post('/verify-otp', async (req, res) => {
+  try {
+    const { phone, otp } = req.body;
+
+    if (!phone || !otp) {
+      return res.status(400).json({ success: false, error: 'Phone and OTP required' });
+    }
+
+    const isValid = await verifyOTP(phone, otp);
+
+    if (!isValid) {
+      return res.status(400).json({ success: false, error: 'Invalid or expired OTP' });
+    }
+
+    // Get user and generate token
+    const result = await pool.query(
+      `SELECT id, phone, name, role, is_verified, is_blocked, latitude, longitude, created_at, updated_at
+       FROM users WHERE phone = $1`,
+      [phone]
     );
 
     const user = result.rows[0];
@@ -41,8 +85,33 @@ router.post('/register', async (req, res) => {
 
     res.json({ success: true, data: { token, user } });
   } catch (error: any) {
-    console.error('Register error:', error);
-    res.status(500).json({ success: false, error: 'Registration failed' });
+    console.error('Verify OTP error:', error);
+    res.status(500).json({ success: false, error: 'Verification failed' });
+  }
+});
+
+// Resend OTP
+router.post('/resend-otp', async (req, res) => {
+  try {
+    const { phone } = req.body;
+
+    if (!phone) {
+      return res.status(400).json({ success: false, error: 'Phone number required' });
+    }
+
+    const canResend = await canResendOTP(phone);
+    if (!canResend) {
+      return res.status(429).json({ success: false, error: 'Please wait before requesting another OTP' });
+    }
+
+    const otp = generateOTP();
+    await storeOTP(phone, otp);
+    await sendOTP(phone, otp);
+
+    res.json({ success: true, message: 'OTP sent successfully' });
+  } catch (error: any) {
+    console.error('Resend OTP error:', error);
+    res.status(500).json({ success: false, error: 'Failed to resend OTP' });
   }
 });
 

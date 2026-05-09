@@ -75,6 +75,28 @@ router.post('/', authMiddleware, async (req: AuthRequest, res: Response) => {
 
     const { listing_id } = req.body;
 
+    // Check 6-hour cooldown after last received food
+    const userCheck = await pool.query(
+      `SELECT last_received_at FROM users WHERE id = $1`,
+      [req.userId]
+    );
+
+    if (userCheck.rows.length > 0 && userCheck.rows[0].last_received_at) {
+      const lastReceived = new Date(userCheck.rows[0].last_received_at);
+      const sixHoursAgo = new Date(Date.now() - 6 * 60 * 60 * 1000);
+      
+      if (lastReceived > sixHoursAgo) {
+        const timeRemaining = new Date(lastReceived.getTime() + 6 * 60 * 60 * 1000 - Date.now());
+        const hoursLeft = Math.floor(timeRemaining.getTime() / (60 * 60 * 1000));
+        const minutesLeft = Math.floor((timeRemaining.getTime() % (60 * 60 * 1000)) / (60 * 1000));
+        
+        return res.status(429).json({ 
+          success: false, 
+          error: `You can request food again in ${hoursLeft}h ${minutesLeft}m. Please wait to give others a chance.` 
+        });
+      }
+    }
+
     // Check listing exists and has remaining quantity
     const listing = await pool.query(
       `SELECT * FROM food_listings WHERE id = $1 AND status = 'active' AND is_available = true AND remaining_quantity > 0 AND expires_at > NOW()`,
@@ -265,10 +287,16 @@ router.put('/:id/pickup', authMiddleware, async (req: AuthRequest, res: Response
       [req.params.id]
     );
 
+    // Update receiver's last_received_at timestamp for 6-hour cooldown
+    await pool.query(
+      `UPDATE users SET last_received_at = NOW() WHERE id = $1`,
+      [claim.rows[0].receiver_id]
+    );
+
     // Notify receiver
     await pool.query(
       `INSERT INTO notifications (user_id, type, title, message, data)
-       VALUES ($1, 'pickup_confirmed', 'Pickup Confirmed', 'Your food pickup has been confirmed. Enjoy your meal!', $2)`,
+       VALUES ($1, 'pickup_confirmed', 'Pickup Confirmed', 'Your food pickup has been confirmed. Enjoy your meal! You can request food again in 6 hours.', $2)`,
       [claim.rows[0].receiver_id, JSON.stringify({ claim_id: req.params.id })]
     );
 

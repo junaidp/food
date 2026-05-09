@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import api from '../lib/api';
 import { Phone, Lock, UserIcon, ArrowRight } from 'lucide-react';
 
 export default function RegisterPage() {
@@ -10,7 +10,6 @@ export default function RegisterPage() {
   const [role, setRole] = useState<'donor' | 'receiver'>('receiver');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { register } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -19,8 +18,9 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      await register(phone, name, role, password);
-      navigate('/');
+      const res = await api.post('/auth/register', { phone, name, role, password });
+      // Redirect to OTP verification page
+      navigate('/verify-otp', { state: { phone } });
     } catch (err: any) {
       setError(err.response?.data?.error || 'Registration failed');
     } finally {

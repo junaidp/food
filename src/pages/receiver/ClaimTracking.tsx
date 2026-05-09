@@ -177,18 +177,33 @@ export default function ClaimTracking() {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-2">
-            <button onClick={notifyArrival} className="btn-primary py-2.5 text-sm flex items-center justify-center gap-1">
-              <MapPin className="w-4 h-4" /> Arrived
+          {/* Instructions */}
+          <div className="bg-blue-50 rounded-xl p-3 mb-4">
+            <p className="text-xs text-blue-800 text-center">
+              📍 <strong>When you arrive:</strong> Tap "I've Arrived" to notify the donor. No need to call or ring the doorbell!
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            {/* Primary Arrival Button */}
+            <button 
+              onClick={notifyArrival} 
+              className="w-full btn-primary py-3.5 text-base font-bold flex items-center justify-center gap-2 shadow-lg"
+            >
+              <MapPin className="w-5 h-5" /> I've Arrived - Notify Donor
             </button>
-            <button onClick={openExternalNav} className="btn-secondary py-2.5 text-sm flex items-center justify-center gap-1">
-              <Navigation className="w-4 h-4" /> Navigate
-            </button>
-            {claim.donor_phone && (
-              <a href={`tel:${claim.donor_phone}`} className="btn-secondary py-2.5 text-sm flex items-center justify-center gap-1">
-                <Phone className="w-4 h-4" /> Call
-              </a>
-            )}
+            
+            {/* Secondary Actions */}
+            <div className="grid grid-cols-2 gap-2">
+              <button onClick={openExternalNav} className="btn-secondary py-2.5 text-sm flex items-center justify-center gap-1">
+                <Navigation className="w-4 h-4" /> Navigate
+              </button>
+              {claim.donor_phone && (
+                <a href={`tel:${claim.donor_phone}`} className="btn-secondary py-2.5 text-sm flex items-center justify-center gap-1">
+                  <Phone className="w-4 h-4" /> Call
+                </a>
+              )}
+            </div>
           </div>
         </div>
       </div>
