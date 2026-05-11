@@ -1,126 +1,203 @@
 /**
- * OTP Service for Pakistan
+ * OTP Service
  * 
- * This service generates and sends OTP codes via SMS.
- * For production, integrate with SMS providers like:
- * - Twilio (international)
- * - MSG91 (supports Pakistan)
- * - Telenor SMS API (Pakistan)
- * - Jazz SMS API (Pakistan)
+ * Primary: EasySendSMS via RapidAPI (works for Pakistan)
+ * Fallback: Twilio Verify API
+ * Dev mode: OTP logged to console, use 123456 to verify
  */
 
 import pool from '../db.js';
+import axios from 'axios';
+import twilio from 'twilio';
+
+// ── SMS Provider toggle ──────────────────────────────────────
+// Set SMS_PROVIDER in .env: 'easysend' | 'twilio' | 'dev'
+const SMS_PROVIDER = process.env.SMS_PROVIDER || 'easysend';
+
+// ── EasySendSMS (RapidAPI) config ────────────────────────────
+const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY || '';
+const EASYSEND_USERNAME = process.env.EASYSEND_USERNAME || '';
+const EASYSEND_PASSWORD = process.env.EASYSEND_PASSWORD || '';
+const EASYSEND_FROM = process.env.EASYSEND_FROM || 'FoodShare';
+
+// ── Twilio config (fallback) ─────────────────────────────────
+const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID || '';
+const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN || '';
+const TWILIO_VERIFY_SERVICE_SID = process.env.TWILIO_VERIFY_SERVICE_SID;
+
+const twilioClient = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+
+// ── Helpers ──────────────────────────────────────────────────
 
 // Generate 6-digit OTP
-export function generateOTP(): string {
+function generateOTP(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-// Store OTP in database
-export async function storeOTP(phone: string, otp: string): Promise<void> {
-  const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
-  
+// Format phone for international format (Pakistan)
+function formatPhoneNumber(phone: string): string {
+  let cleaned = phone.replace(/[\s\-\(\)]/g, '');
+  if (cleaned.startsWith('0')) {
+    cleaned = '+92' + cleaned.substring(1);
+  } else if (cleaned.startsWith('92') && !cleaned.startsWith('+')) {
+    cleaned = '+' + cleaned;
+  } else if (!cleaned.startsWith('+')) {
+    cleaned = '+92' + cleaned;
+  }
+  return cleaned;
+}
+
+// Format phone without + for EasySendSMS (e.g. 923445535506)
+function formatPhoneNoPlus(phone: string): string {
+  return formatPhoneNumber(phone).replace('+', '');
+}
+
+// Store OTP in database with 10-minute expiry
+async function storeOTP(phone: string, otp: string): Promise<void> {
+  const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
   await pool.query(
     `UPDATE users SET otp_code = $1, otp_expires_at = $2 WHERE phone = $3`,
     [otp, expiresAt, phone]
   );
 }
 
-// Verify OTP
-export async function verifyOTP(phone: string, otp: string): Promise<boolean> {
+// ── Send via EasySendSMS (RapidAPI) ──────────────────────────
+async function sendViaEasySend(phone: string, otp: string): Promise<boolean> {
+  const to = formatPhoneNoPlus(phone);
+  const text = `Your FoodShare verification code is: ${otp}. Valid for 10 minutes.`;
+
+  try {
+    const params = new URLSearchParams();
+    params.append('username', EASYSEND_USERNAME);
+    params.append('password', EASYSEND_PASSWORD);
+    params.append('from', EASYSEND_FROM);
+    params.append('to', to);
+    params.append('text', text);
+    params.append('type', '0');
+
+    const response = await axios.post(
+      'https://easysendsms.p.rapidapi.com/bulksms',
+      params.toString(),
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'x-rapidapi-host': 'easysendsms.p.rapidapi.com',
+          'x-rapidapi-key': RAPIDAPI_KEY,
+        },
+      }
+    );
+
+    console.log(`✅ SMS sent via EasySendSMS to ${to}. Response:`, response.data);
+    return true;
+  } catch (error: any) {
+    console.error('❌ EasySendSMS failed:', error.response?.data || error.message);
+    return false;
+  }
+}
+
+// ── Send via Twilio Verify (fallback) ────────────────────────
+async function sendViaTwilio(phone: string): Promise<boolean> {
+  if (!TWILIO_VERIFY_SERVICE_SID) {
+    console.log('⚠️  TWILIO_VERIFY_SERVICE_SID not set. Cannot use Twilio fallback.');
+    return false;
+  }
+  const formattedPhone = formatPhoneNumber(phone);
+  try {
+    const verification = await twilioClient.verify.v2
+      .services(TWILIO_VERIFY_SERVICE_SID)
+      .verifications.create({ to: formattedPhone, channel: 'sms' });
+    console.log(`✅ OTP sent via Twilio Verify. Status: ${verification.status}`);
+    return true;
+  } catch (error: any) {
+    console.error('❌ Twilio Verify failed:', error.message);
+    return false;
+  }
+}
+
+// ── Public API ───────────────────────────────────────────────
+
+// Send OTP to user's phone
+export async function sendOTP(phone: string): Promise<boolean> {
+  const otp = generateOTP();
+  console.log(`📱 OTP for ${phone}: ${otp}`);
+
+  // Always store OTP in our DB (needed for easysend & dev modes)
+  await storeOTP(phone, otp);
+
+  if (SMS_PROVIDER === 'twilio') {
+    // Twilio Verify generates its own code, but we still store ours as backup
+    return sendViaTwilio(phone);
+  }
+
+  if (SMS_PROVIDER === 'easysend') {
+    const sent = await sendViaEasySend(phone, otp);
+    if (sent) return true;
+    // Fallback to Twilio if EasySendSMS fails
+    console.log('🔄 Falling back to Twilio...');
+    return sendViaTwilio(phone);
+  }
+
+  // Dev mode
+  console.log('⚠️  [DEV MODE] OTP logged to console only. Use code shown above.');
+  return true;
+}
+
+// Verify OTP code entered by user
+export async function verifyOTP(phone: string, code: string): Promise<boolean> {
+  // If using Twilio Verify as primary, check with Twilio first
+  if (SMS_PROVIDER === 'twilio' && TWILIO_VERIFY_SERVICE_SID) {
+    const formattedPhone = formatPhoneNumber(phone);
+    try {
+      const check = await twilioClient.verify.v2
+        .services(TWILIO_VERIFY_SERVICE_SID)
+        .verificationChecks.create({ to: formattedPhone, code });
+      if (check.status === 'approved') {
+        await pool.query(`UPDATE users SET otp_code = NULL, otp_expires_at = NULL, is_verified = true WHERE phone = $1`, [phone]);
+        console.log(`✅ OTP verified via Twilio for ${formattedPhone}`);
+        return true;
+      }
+      return false;
+    } catch (error: any) {
+      console.error('❌ Twilio verification error:', error.message);
+      return false;
+    }
+  }
+
+  // For easysend & dev mode, verify against our database
   const result = await pool.query(
     `SELECT otp_code, otp_expires_at FROM users WHERE phone = $1`,
     [phone]
   );
 
-  if (result.rows.length === 0) {
-    return false;
-  }
+  if (result.rows.length === 0) return false;
 
   const { otp_code, otp_expires_at } = result.rows[0];
 
-  // Check if OTP matches and hasn't expired
-  if (otp_code !== otp) {
-    return false;
-  }
+  if (!otp_code || otp_code !== code) return false;
+  if (new Date() > new Date(otp_expires_at)) return false;
 
-  if (new Date() > new Date(otp_expires_at)) {
-    return false;
-  }
-
-  // Clear OTP after successful verification
+  // OTP valid — mark user verified & clear OTP
   await pool.query(
     `UPDATE users SET otp_code = NULL, otp_expires_at = NULL, is_verified = true WHERE phone = $1`,
     [phone]
   );
-
+  console.log(`✅ OTP verified for ${phone}`);
   return true;
 }
 
-// Send OTP via SMS
-export async function sendOTP(phone: string, otp: string): Promise<boolean> {
-  try {
-    // For development: Log OTP to console
-    console.log(`📱 OTP for ${phone}: ${otp}`);
-    
-    // TODO: Integrate with SMS provider for production
-    // Example integrations:
-    
-    // 1. Twilio (International)
-    // const twilio = require('twilio');
-    // const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
-    // await client.messages.create({
-    //   body: `Your FoodShare verification code is: ${otp}. Valid for 10 minutes.`,
-    //   from: process.env.TWILIO_PHONE_NUMBER,
-    //   to: phone
-    // });
-    
-    // 2. MSG91 (Supports Pakistan)
-    // const axios = require('axios');
-    // await axios.get(`https://api.msg91.com/api/v5/otp`, {
-    //   params: {
-    //     authkey: process.env.MSG91_AUTH_KEY,
-    //     mobile: phone,
-    //     otp: otp,
-    //     template_id: process.env.MSG91_TEMPLATE_ID
-    //   }
-    // });
-    
-    // 3. Local Pakistani SMS Provider
-    // const axios = require('axios');
-    // await axios.post('https://sms-provider.pk/api/send', {
-    //   api_key: process.env.SMS_API_KEY,
-    //   phone: phone,
-    //   message: `Your FoodShare OTP is: ${otp}. Valid for 10 minutes.`
-    // });
-    
-    // For now, return true (development mode)
-    // In production, return the actual SMS send result
-    return true;
-  } catch (error) {
-    console.error('Failed to send OTP:', error);
-    return false;
-  }
-}
-
-// Resend OTP with rate limiting
-export async function canResendOTP(phone: string): Promise<boolean> {
+// Resend OTP
+export async function resendOTP(phone: string): Promise<boolean> {
+  // Rate limit: check if last OTP was sent less than 1 minute ago
   const result = await pool.query(
     `SELECT otp_expires_at FROM users WHERE phone = $1`,
     [phone]
   );
-
-  if (result.rows.length === 0) {
-    return true;
+  if (result.rows.length > 0 && result.rows[0].otp_expires_at) {
+    const sentAt = new Date(result.rows[0].otp_expires_at).getTime() - 10 * 60 * 1000;
+    if (Date.now() - sentAt < 60 * 1000) {
+      console.log('⏳ Resend too soon, rate limited');
+      return false;
+    }
   }
-
-  const { otp_expires_at } = result.rows[0];
-  
-  // Allow resend if no OTP exists or if 2 minutes have passed
-  if (!otp_expires_at) {
-    return true;
-  }
-
-  const timeSinceLastOTP = Date.now() - (new Date(otp_expires_at).getTime() - 10 * 60 * 1000);
-  return timeSinceLastOTP > 2 * 60 * 1000; // 2 minutes
+  return sendOTP(phone);
 }

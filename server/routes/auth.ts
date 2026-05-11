@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import pool from '../db.js';
 import { AuthRequest, authMiddleware } from '../middleware/auth.js';
-import { generateOTP, storeOTP, sendOTP, verifyOTP, canResendOTP } from '../services/otp.js';
+import { sendOTP, verifyOTP, resendOTP } from '../services/otp.js';
 
 const router = Router();
 
@@ -35,10 +35,11 @@ router.post('/register', async (req, res) => {
 
     const user = result.rows[0];
 
-    // Generate and send OTP
-    const otp = generateOTP();
-    await storeOTP(phone, otp);
-    await sendOTP(phone, otp);
+    // Send OTP via Twilio Verify
+    const sent = await sendOTP(phone);
+    if (!sent) {
+      return res.status(500).json({ success: false, error: 'Failed to send OTP. Please try again.' });
+    }
 
     res.json({ 
       success: true, 
@@ -50,7 +51,15 @@ router.post('/register', async (req, res) => {
     });
   } catch (error: any) {
     console.error('Register error:', error);
-    res.status(500).json({ success: false, error: 'Registration failed' });
+    console.error('Error message:', error.message);
+    console.error('Error stack:', error.stack);
+    
+    // Return more specific error in development
+    const errorMessage = process.env.NODE_ENV === 'development' 
+      ? error.message 
+      : 'Registration failed';
+    
+    res.status(500).json({ success: false, error: errorMessage });
   }
 });
 
@@ -99,14 +108,10 @@ router.post('/resend-otp', async (req, res) => {
       return res.status(400).json({ success: false, error: 'Phone number required' });
     }
 
-    const canResend = await canResendOTP(phone);
-    if (!canResend) {
+    const sent = await resendOTP(phone);
+    if (!sent) {
       return res.status(429).json({ success: false, error: 'Please wait before requesting another OTP' });
     }
-
-    const otp = generateOTP();
-    await storeOTP(phone, otp);
-    await sendOTP(phone, otp);
 
     res.json({ success: true, message: 'OTP sent successfully' });
   } catch (error: any) {
