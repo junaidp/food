@@ -151,7 +151,7 @@ export default function OTPVerificationPage() {
 
         <div className="mt-6 bg-blue-50 rounded-xl p-4">
           <p className="text-xs text-blue-800 text-center">
-            💡 <strong>Development Mode:</strong> Check your server console for the OTP code
+            📱 A 6-digit verification code has been sent to your mobile number via SMS
           </p>
         </div>
       </div>
