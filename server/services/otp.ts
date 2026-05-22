@@ -1,9 +1,10 @@
 /**
  * OTP Service
  * 
- * Primary: EasySendSMS via RapidAPI (works for Pakistan)
+ * Primary: Mocean (https://moceanapi.com) — REST SMS API
+ * Alt: Messente (https://messente.com) — supports Pakistan
  * Fallback: Twilio Verify API
- * Dev mode: OTP logged to console, use 123456 to verify
+ * Dev mode: OTP logged to console, use code from console to verify
  */
 
 import pool from '../db.js';
@@ -11,14 +12,17 @@ import axios from 'axios';
 import twilio from 'twilio';
 
 // ── SMS Provider toggle ──────────────────────────────────────
-// Set SMS_PROVIDER in .env: 'easysend' | 'twilio' | 'dev'
-const SMS_PROVIDER = process.env.SMS_PROVIDER || 'easysend';
+// Set SMS_PROVIDER in .env: 'mocean' | 'messente' | 'twilio' | 'dev'
+const SMS_PROVIDER = process.env.SMS_PROVIDER || 'mocean';
 
-// ── EasySendSMS (RapidAPI) config ────────────────────────────
-const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY || '';
-const EASYSEND_USERNAME = process.env.EASYSEND_USERNAME || '';
-const EASYSEND_PASSWORD = process.env.EASYSEND_PASSWORD || '';
-const EASYSEND_FROM = process.env.EASYSEND_FROM || 'FoodShare';
+// ── Mocean config (primary) ─────────────────────────────────
+const MOCEAN_API_KEY = process.env.MOCEAN_API_KEY || '';
+const MOCEAN_FROM = process.env.MOCEAN_FROM || 'MOCEAN';
+
+// ── Messente config ───────────────────────────────────────────
+const MESSENTE_API_USERNAME = process.env.MESSENTE_API_USERNAME || '';
+const MESSENTE_API_PASSWORD = process.env.MESSENTE_API_PASSWORD || '';
+const MESSENTE_SENDER = process.env.MESSENTE_SENDER || 'FoodShare';
 
 // ── Twilio config (fallback) ─────────────────────────────────
 const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID || '';
@@ -47,11 +51,6 @@ function formatPhoneNumber(phone: string): string {
   return cleaned;
 }
 
-// Format phone without + for EasySendSMS (e.g. 923445535506)
-function formatPhoneNoPlus(phone: string): string {
-  return formatPhoneNumber(phone).replace('+', '');
-}
-
 // Store OTP in database with 10-minute expiry
 async function storeOTP(phone: string, otp: string): Promise<void> {
   const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
@@ -61,36 +60,71 @@ async function storeOTP(phone: string, otp: string): Promise<void> {
   );
 }
 
-// ── Send via EasySendSMS (RapidAPI) ──────────────────────────
-async function sendViaEasySend(phone: string, otp: string): Promise<boolean> {
-  const to = formatPhoneNoPlus(phone);
+// ── Send via Mocean SMS API ─────────────────────────────────
+async function sendViaMocean(phone: string, otp: string): Promise<boolean> {
+  const to = formatPhoneNumber(phone);
   const text = `Your FoodShare verification code is: ${otp}. Valid for 10 minutes.`;
 
   try {
-    const params = new URLSearchParams();
-    params.append('username', EASYSEND_USERNAME);
-    params.append('password', EASYSEND_PASSWORD);
-    params.append('from', EASYSEND_FROM);
-    params.append('to', to);
-    params.append('text', text);
-    params.append('type', '0');
+    const params = new URLSearchParams({
+      'mocean-from': MOCEAN_FROM,
+      'mocean-to': to,
+      'mocean-text': text,
+    });
 
     const response = await axios.post(
-      'https://easysendsms.p.rapidapi.com/bulksms',
+      'https://rest.moceanapi.com/rest/2/sms',
       params.toString(),
       {
         headers: {
+          'Authorization': `Bearer ${MOCEAN_API_KEY}`,
           'Content-Type': 'application/x-www-form-urlencoded',
-          'x-rapidapi-host': 'easysendsms.p.rapidapi.com',
-          'x-rapidapi-key': RAPIDAPI_KEY,
         },
       }
     );
 
-    console.log(`✅ SMS sent via EasySendSMS to ${to}. Response:`, response.data);
+    console.log(`✅ SMS sent via Mocean to ${to}. Response:`, response.data);
     return true;
   } catch (error: any) {
-    console.error('❌ EasySendSMS failed:', error.response?.data || error.message);
+    console.error('❌ Mocean failed:', error.response?.data || error.message);
+    return false;
+  }
+}
+
+// ── Send via Messente Omnichannel API ────────────────────────
+async function sendViaMessente(phone: string, otp: string): Promise<boolean> {
+  const to = formatPhoneNumber(phone);
+  const text = `Your FoodShare verification code is: ${otp}. Valid for 10 minutes.`;
+
+  try {
+    const response = await axios.post(
+      'https://api.messente.com/v1/omnimessage',
+      {
+        to: to,
+        messages: [
+          {
+            channel: 'sms',
+            sender: MESSENTE_SENDER,
+            text: text,
+          },
+        ],
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        auth: {
+          username: MESSENTE_API_USERNAME,
+          password: MESSENTE_API_PASSWORD,
+        },
+      }
+    );
+
+    console.log(`✅ SMS sent via Messente to ${to}. Response:`, response.data);
+    return true;
+  } catch (error: any) {
+    console.error('❌ Messente failed:', error.response?.data || error.message);
     return false;
   }
 }
@@ -121,19 +155,28 @@ export async function sendOTP(phone: string): Promise<boolean> {
   const otp = generateOTP();
   console.log(`📱 OTP for ${phone}: ${otp}`);
 
-  // Always store OTP in our DB (needed for easysend & dev modes)
+  // Always store OTP in our DB
   await storeOTP(phone, otp);
 
-  if (SMS_PROVIDER === 'twilio') {
-    // Twilio Verify generates its own code, but we still store ours as backup
+  if (SMS_PROVIDER === 'mocean') {
+    const sent = await sendViaMocean(phone, otp);
+    if (sent) return true;
+    console.log('🔄 Mocean failed, falling back to Messente...');
+    const sentMessente = await sendViaMessente(phone, otp);
+    if (sentMessente) return true;
+    console.log('🔄 Falling back to Twilio...');
     return sendViaTwilio(phone);
   }
 
-  if (SMS_PROVIDER === 'easysend') {
-    const sent = await sendViaEasySend(phone, otp);
+  if (SMS_PROVIDER === 'messente') {
+    const sent = await sendViaMessente(phone, otp);
     if (sent) return true;
-    // Fallback to Twilio if EasySendSMS fails
+    // Fallback to Twilio if Messente fails
     console.log('🔄 Falling back to Twilio...');
+    return sendViaTwilio(phone);
+  }
+
+  if (SMS_PROVIDER === 'twilio') {
     return sendViaTwilio(phone);
   }
 
@@ -163,7 +206,7 @@ export async function verifyOTP(phone: string, code: string): Promise<boolean> {
     }
   }
 
-  // For easysend & dev mode, verify against our database
+  // For messente & dev mode, verify against our database
   const result = await pool.query(
     `SELECT otp_code, otp_expires_at FROM users WHERE phone = $1`,
     [phone]
