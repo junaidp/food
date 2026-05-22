@@ -94,12 +94,13 @@ export default function RegisterPage() {
               <label className="block text-sm font-medium text-gray-700 mb-1.5">Phone Number</label>
               <div className="relative">
                 <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <span className="absolute left-10 top-1/2 -translate-y-1/2 text-sm text-gray-400 select-none">+92</span>
                 <input
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="input-field pl-11"
-                  placeholder="03001234567"
+                  className="input-field pl-16"
+                  placeholder="3001234567"
                   required
                 />
               </div>

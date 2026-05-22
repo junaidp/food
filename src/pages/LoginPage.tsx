@@ -52,7 +52,7 @@ export default function LoginPage() {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   className="input-field pl-11"
-                  placeholder="03001234567"
+                  placeholder="3001234567"
                   required
                 />
               </div>
