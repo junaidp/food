@@ -40,7 +40,11 @@ function generateOTP(): string {
 
 // Format phone for international format (Pakistan)
 function formatPhoneNumber(phone: string): string {
+
   let cleaned = phone.replace(/[\s\-\(\)]/g, '');
+  if (cleaned.startsWith('+920')) {
+    cleaned = '+92' + cleaned.substring(4);
+  }
   if (cleaned.startsWith('0')) {
     cleaned = '+92' + cleaned.substring(1);
   } else if (cleaned.startsWith('92') && !cleaned.startsWith('+')) {
@@ -48,6 +52,7 @@ function formatPhoneNumber(phone: string): string {
   } else if (!cleaned.startsWith('+')) {
     cleaned = '+92' + cleaned;
   }
+
   return cleaned;
 }
 
