@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../lib/api';
+import { useLanguage } from '../context/LanguageContext';
+import { t } from '../lib/translations';
 import { Phone, Lock, UserIcon, ArrowRight } from 'lucide-react';
 
 export default function RegisterPage() {
@@ -10,6 +12,7 @@ export default function RegisterPage() {
   const [role, setRole] = useState<'donor' | 'receiver'>('receiver');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const { lang } = useLanguage();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -22,7 +25,7 @@ export default function RegisterPage() {
       // Redirect to OTP verification page
       navigate('/verify-otp', { state: { phone } });
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Registration failed');
+      setError(err.response?.data?.error || t('registerFailed', lang));
     } finally {
       setLoading(false);
     }
@@ -33,8 +36,8 @@ export default function RegisterPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="text-5xl mb-3">🍽️</div>
-          <h1 className="text-3xl font-bold text-gray-900">Join FoodShare</h1>
-          <p className="text-gray-500 mt-2">Create your account</p>
+          <h1 className="text-3xl font-bold text-gray-900">{t('registerJoin', lang)}</h1>
+          <p className="text-gray-500 mt-2">{t('registerCreateAccount', lang)}</p>
         </div>
 
         <div className="card">
@@ -50,8 +53,8 @@ export default function RegisterPage() {
               }`}
             >
               <span className="text-3xl block mb-1">🥗</span>
-              <span className="font-semibold text-sm">I'm a Donor</span>
-              <p className="text-xs text-gray-500 mt-0.5">Share food</p>
+              <span className="font-semibold text-sm">{t('registerImDonor', lang)}</span>
+              <p className="text-xs text-gray-500 mt-0.5">{t('registerShareFood', lang)}</p>
             </button>
             <button
               type="button"
@@ -63,8 +66,8 @@ export default function RegisterPage() {
               }`}
             >
               <span className="text-3xl block mb-1">🙋</span>
-              <span className="font-semibold text-sm">I'm a Receiver</span>
-              <p className="text-xs text-gray-500 mt-0.5">Find food</p>
+              <span className="font-semibold text-sm">{t('registerImReceiver', lang)}</span>
+              <p className="text-xs text-gray-500 mt-0.5">{t('registerFindFood', lang)}</p>
             </button>
           </div>
 
@@ -76,7 +79,7 @@ export default function RegisterPage() {
             )}
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Full Name</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('registerFullName', lang)}</label>
               <div className="relative">
                 <UserIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
@@ -84,14 +87,14 @@ export default function RegisterPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="input-field pl-11"
-                  placeholder="Your name"
+                  placeholder={t('registerYourName', lang)}
                   required
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Phone Number</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('registerPhoneNumber', lang)}</label>
               <div className="relative">
                 <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <span className="absolute left-10 top-1/2 -translate-y-1/2 text-sm text-gray-400 select-none">+92</span>
@@ -107,7 +110,7 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('registerPassword', lang)}</label>
               <div className="relative">
                 <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
@@ -115,7 +118,7 @@ export default function RegisterPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="input-field pl-11"
-                  placeholder="Min 6 characters"
+                  placeholder={t('registerMin6Chars', lang)}
                   minLength={6}
                   required
                 />
@@ -126,15 +129,15 @@ export default function RegisterPage() {
               {loading ? (
                 <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
               ) : (
-                <>Create Account <ArrowRight className="w-5 h-5" /></>
+                <>{t('registerCreateAccountBtn', lang)} <ArrowRight className="w-5 h-5" /></>
               )}
             </button>
           </form>
 
           <p className="text-center text-sm text-gray-500 mt-6">
-            Already have an account?{' '}
+            {t('registerHaveAccount', lang)}{' '}
             <Link to="/login" className="text-primary-600 font-semibold hover:underline">
-              Sign In
+              {t('registerSignInLink', lang)}
             </Link>
           </p>
         </div>

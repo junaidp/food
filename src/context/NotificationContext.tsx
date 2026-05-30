@@ -2,6 +2,8 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import api from '../lib/api';
 import { getSocket } from '../lib/socket';
 import { useAuth } from './AuthContext';
+import { useLanguage } from './LanguageContext';
+import { t } from '../lib/translations';
 import type { Notification } from '../../shared/types';
 
 interface Toast {
@@ -26,6 +28,7 @@ const NotificationContext = createContext<NotificationContextType | null>(null);
 
 export function NotificationProvider({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
+  const { lang } = useLanguage();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -78,23 +81,23 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     const socket = getSocket();
     if (socket) {
       socket.on('new_claim', (data: any) => {
-        addToast('🔔 New Request', `${data.receiver_name} wants food from "${data.listing_title}"`, 'info');
+        addToast(`🔔 ${t('toastNewRequest', lang)}`, t('toastWantsFood', lang, { name: data.receiver_name, title: data.listing_title }), 'info');
         fetchNotifications();
       });
       socket.on('claim_accepted', (data: any) => {
-        addToast('✅ Request Accepted!', `Your pickup code: ${data.pickup_code}`, 'success');
+        addToast(`✅ ${t('toastRequestAccepted', lang)}`, t('toastYourPickupCode', lang, { code: data.pickup_code }), 'success');
         fetchNotifications();
       });
       socket.on('claim_rejected', () => {
-        addToast('Request Update', 'Your food request was not accepted.', 'error');
+        addToast(t('toastRequestUpdate', lang), t('toastRequestNotAccepted', lang), 'error');
         fetchNotifications();
       });
       socket.on('receiver_arrived', (data: any) => {
-        addToast('📍 Receiver Arrived!', `${data.receiver_name} is at your location`, 'info');
+        addToast(`📍 ${t('toastReceiverArrived', lang)}`, t('toastAtYourLocation', lang, { name: data.receiver_name }), 'info');
         fetchNotifications();
       });
       socket.on('pickup_confirmed', () => {
-        addToast('🎉 Pickup Confirmed!', 'Enjoy your meal!', 'success');
+        addToast(`🎉 ${t('toastPickupConfirmed', lang)}`, t('toastEnjoyMeal', lang), 'success');
         fetchNotifications();
       });
     }

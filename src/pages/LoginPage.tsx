@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
+import { t } from '../lib/translations';
 import { Phone, Lock, ArrowRight } from 'lucide-react';
 
 export default function LoginPage() {
@@ -9,6 +11,7 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
+  const { lang } = useLanguage();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -20,7 +23,7 @@ export default function LoginPage() {
       await login(phone, password);
       navigate('/');
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Login failed');
+      setError(err.response?.data?.error || t('loginFailed', lang));
     } finally {
       setLoading(false);
     }
@@ -31,8 +34,8 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="text-5xl mb-3">🍽️</div>
-          <h1 className="text-3xl font-bold text-gray-900">Welcome Back</h1>
-          <p className="text-gray-500 mt-2">Sign in to FoodShare</p>
+          <h1 className="text-3xl font-bold text-gray-900">{t('loginWelcomeBack', lang)}</h1>
+          <p className="text-gray-500 mt-2">{t('loginSignInTo', lang)}</p>
         </div>
 
         <div className="card">
@@ -44,7 +47,7 @@ export default function LoginPage() {
             )}
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Phone Number</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('loginPhoneNumber', lang)}</label>
               <div className="relative">
                 <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
@@ -59,7 +62,7 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('loginPassword', lang)}</label>
               <div className="relative">
                 <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
@@ -77,15 +80,15 @@ export default function LoginPage() {
               {loading ? (
                 <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
               ) : (
-                <>Sign In <ArrowRight className="w-5 h-5" /></>
+                <>{t('loginSignIn', lang)} <ArrowRight className="w-5 h-5" /></>
               )}
             </button>
           </form>
 
           <p className="text-center text-sm text-gray-500 mt-6">
-            Don't have an account?{' '}
+            {t('loginNoAccount', lang)}{' '}
             <Link to="/register" className="text-primary-600 font-semibold hover:underline">
-              Sign Up
+              {t('loginSignUpLink', lang)}
             </Link>
           </p>
         </div>

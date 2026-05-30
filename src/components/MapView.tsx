@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
 import L from 'leaflet';
+import { useLanguage } from '../context/LanguageContext';
+import { t } from '../lib/translations';
 import type { FoodListing } from '../../shared/types';
 
 // Fix for default marker icons in Leaflet + Vite
@@ -61,6 +63,7 @@ export default function MapView({
   showRoute,
   className = 'w-full h-[60vh] md:h-[70vh]',
 }: MapViewProps) {
+  const { lang } = useLanguage();
   const mapRef = useRef<L.Map | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const markersRef = useRef<L.LayerGroup | null>(null);
@@ -96,7 +99,7 @@ export default function MapView({
     if (userLocation) {
       L.marker([userLocation.lat, userLocation.lng], { icon: createUserIcon() })
         .addTo(markersRef.current)
-        .bindPopup('<b>Your Location</b>');
+        .bindPopup(`<b>${t('mapYourLocation', lang)}</b>`);
     }
 
     // Add listing markers
@@ -108,8 +111,8 @@ export default function MapView({
       marker.bindPopup(`
         <div style="min-width:180px;padding:4px;">
           <h3 style="font-weight:700;font-size:14px;margin-bottom:4px;">${listing.title}</h3>
-          <p style="color:#666;font-size:12px;">Servings: <b>${listing.remaining_quantity}</b></p>
-          ${listing.donor_name ? `<p style="color:#666;font-size:12px;">By: ${listing.donor_name}</p>` : ''}
+          <p style="color:#666;font-size:12px;">${t('mapServingsLabel', lang)}: <b>${listing.remaining_quantity}</b></p>
+          ${listing.donor_name ? `<p style="color:#666;font-size:12px;">${t('mapByLabel', lang)}: ${listing.donor_name}</p>` : ''}
           <p style="color:#888;font-size:11px;margin-top:4px;">${listing.address || ''}</p>
         </div>
       `);
@@ -123,7 +126,7 @@ export default function MapView({
     if (otherUserLocation) {
       L.marker([otherUserLocation.lat, otherUserLocation.lng], { icon: defaultIcon })
         .addTo(markersRef.current)
-        .bindPopup('<b>Other User</b>');
+        .bindPopup(`<b>${t('mapOtherUser', lang)}</b>`);
     }
 
     // Route line

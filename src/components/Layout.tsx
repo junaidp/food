@@ -2,6 +2,9 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useNotifications } from '../context/NotificationContext';
+import { useLanguage } from '../context/LanguageContext';
+import { t } from '../lib/translations';
+import LanguageSelector from './LanguageSelector';
 import {
   Home, PlusCircle, ClipboardList, MapPin, Bell,
   User, LogOut, Shield, Users, AlertTriangle, UtensilsCrossed
@@ -10,6 +13,7 @@ import {
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { user, logout } = useAuth();
   const { unreadCount } = useNotifications();
+  const { lang } = useLanguage();
   const location = useLocation();
 
   if (!user) return null;
@@ -17,21 +21,21 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const isActive = (path: string) => location.pathname === path;
 
   const donorNav = [
-    { path: '/donor', icon: Home, label: 'Dashboard' },
-    { path: '/donor/create', icon: PlusCircle, label: 'Add Food' },
-    { path: '/donor/claims', icon: ClipboardList, label: 'Requests' },
+    { path: '/donor', icon: Home, label: t('layoutDashboard', lang) },
+    { path: '/donor/create', icon: PlusCircle, label: t('layoutAddFood', lang) },
+    { path: '/donor/claims', icon: ClipboardList, label: t('layoutRequests', lang) },
   ];
 
   const receiverNav = [
-    { path: '/receiver', icon: MapPin, label: 'Find Food' },
-    { path: '/receiver/claims', icon: ClipboardList, label: 'My Claims' },
+    { path: '/receiver', icon: MapPin, label: t('layoutFindFood', lang) },
+    { path: '/receiver/claims', icon: ClipboardList, label: t('layoutMyClaims', lang) },
   ];
 
   const adminNav = [
-    { path: '/admin', icon: Shield, label: 'Dashboard' },
-    { path: '/admin/users', icon: Users, label: 'Users' },
-    { path: '/admin/listings', icon: UtensilsCrossed, label: 'Listings' },
-    { path: '/admin/reports', icon: AlertTriangle, label: 'Reports' },
+    { path: '/admin', icon: Shield, label: t('layoutDashboard', lang) },
+    { path: '/admin/users', icon: Users, label: t('adminManageUsersTitle', lang) },
+    { path: '/admin/listings', icon: UtensilsCrossed, label: t('adminAllListings', lang) },
+    { path: '/admin/reports', icon: AlertTriangle, label: t('adminReportsComplaints', lang) },
   ];
 
   const navItems = user.role === 'donor' ? donorNav : user.role === 'receiver' ? receiverNav : adminNav;
@@ -47,7 +51,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <span className="text-2xl">{roleIcon}</span>
             <h1 className="text-lg font-bold text-gray-900">FoodShare</h1>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <LanguageSelector />
             <Link to="/notifications" className="relative p-2">
               <Bell className="w-5 h-5 text-gray-600" />
               {unreadCount > 0 && (
@@ -66,12 +71,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* Sidebar (desktop) */}
       <aside className="hidden md:flex fixed left-0 top-0 bottom-0 w-64 bg-white border-r border-gray-100 flex-col z-40">
         <div className="p-6 border-b border-gray-100">
-          <div className="flex items-center gap-3">
-            <span className="text-3xl">{roleIcon}</span>
-            <div>
-              <h1 className="text-xl font-bold text-gray-900">FoodShare</h1>
-              <p className="text-sm text-gray-500 capitalize">{user.role} Panel</p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <span className="text-3xl">{roleIcon}</span>
+              <div>
+                <h1 className="text-xl font-bold text-gray-900">{t('appName', lang)}</h1>
+                <p className="text-sm text-gray-500 capitalize">{user.role} {t('layoutPanel', lang)}</p>
+              </div>
             </div>
+            <LanguageSelector />
           </div>
         </div>
 
@@ -107,7 +115,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </span>
               )}
             </div>
-            Notifications
+            {t('layoutNotifications', lang)}
           </Link>
 
           <Link
@@ -119,7 +127,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             }`}
           >
             <User className="w-5 h-5" />
-            Profile
+            {t('layoutProfile', lang)}
           </Link>
         </nav>
 
@@ -138,7 +146,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             className="flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 w-full transition-colors"
           >
             <LogOut className="w-5 h-5" />
-            Logout
+            {t('layoutLogout', lang)}
           </button>
         </div>
       </aside>

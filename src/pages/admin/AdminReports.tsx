@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import api from '../../lib/api';
 import { useNotifications } from '../../context/NotificationContext';
+import { useLanguage } from '../../context/LanguageContext';
+import { t } from '../../lib/translations';
 import { AlertTriangle, CheckCircle2, Eye } from 'lucide-react';
 import { formatTimeAgo } from '../../lib/utils';
 import type { Report } from '../../../shared/types';
@@ -16,6 +18,7 @@ export default function AdminReports() {
   const [reports, setReports] = useState<ExtendedReport[]>([]);
   const [loading, setLoading] = useState(true);
   const { addToast } = useNotifications();
+  const { lang } = useLanguage();
 
   const fetchReports = async () => {
     try {
@@ -33,10 +36,10 @@ export default function AdminReports() {
   const updateStatus = async (id: string, status: string) => {
     try {
       await api.put(`/admin/reports/${id}`, { status });
-      addToast('Updated', `Report marked as ${status}.`, 'success');
+      addToast(t('adminUpdated', lang), t('adminReportMarked', lang, { status }), 'success');
       fetchReports();
     } catch {
-      addToast('Error', 'Failed to update report.', 'error');
+      addToast(t('error', lang), t('adminFailedUpdateReport', lang), 'error');
     }
   };
 
@@ -50,13 +53,13 @@ export default function AdminReports() {
 
   return (
     <div className="p-4 md:p-8 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Reports & Complaints</h1>
+      <h1 className="text-2xl font-bold text-gray-900 mb-6">{t('adminReportsComplaints', lang)}</h1>
 
       {reports.length === 0 ? (
         <div className="card text-center py-12">
           <CheckCircle2 className="w-12 h-12 text-green-300 mx-auto mb-3" />
-          <h3 className="text-lg font-semibold text-gray-900">No reports</h3>
-          <p className="text-gray-500 mt-1">All clear! No reports to review.</p>
+          <h3 className="text-lg font-semibold text-gray-900">{t('adminNoReports', lang)}</h3>
+          <p className="text-gray-500 mt-1">{t('adminAllClear', lang)}</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -77,28 +80,28 @@ export default function AdminReports() {
                       report.status === 'reviewed' ? 'bg-amber-100 text-amber-700' :
                       'bg-green-100 text-green-700'
                     }`}>
-                      {report.status}
+                      {t('status' + report.status.charAt(0).toUpperCase() + report.status.slice(1), lang)}
                     </span>
-                    <span className="text-xs text-gray-400">{formatTimeAgo(report.created_at)}</span>
+                    <span className="text-xs text-gray-400">{formatTimeAgo(report.created_at, lang)}</span>
                   </div>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4 mb-3 text-sm">
                 <div>
-                  <p className="text-gray-500 text-xs">Reporter</p>
+                  <p className="text-gray-500 text-xs">{t('adminReporter', lang)}</p>
                   <p className="font-semibold">{report.reporter_name}</p>
                   <p className="text-xs text-gray-400">{report.reporter_phone}</p>
                 </div>
                 <div>
-                  <p className="text-gray-500 text-xs">Reported User</p>
+                  <p className="text-gray-500 text-xs">{t('adminReportedUser', lang)}</p>
                   <p className="font-semibold">{report.reported_name}</p>
                   <p className="text-xs text-gray-400">{report.reported_phone}</p>
                 </div>
               </div>
 
               <div className="bg-gray-50 rounded-xl p-3 mb-3">
-                <p className="text-sm font-medium text-gray-700">Reason: {report.reason}</p>
+                <p className="text-sm font-medium text-gray-700">{t('adminReason', lang)}: {report.reason}</p>
                 {report.description && (
                   <p className="text-sm text-gray-500 mt-1">{report.description}</p>
                 )}
@@ -110,13 +113,13 @@ export default function AdminReports() {
                     onClick={() => updateStatus(report.id, 'reviewed')}
                     className="btn-secondary py-2 px-4 text-sm flex items-center gap-1"
                   >
-                    <Eye className="w-4 h-4" /> Mark Reviewed
+                    <Eye className="w-4 h-4" /> {t('adminMarkReviewed', lang)}
                   </button>
                   <button
                     onClick={() => updateStatus(report.id, 'resolved')}
                     className="btn-primary py-2 px-4 text-sm flex items-center gap-1"
                   >
-                    <CheckCircle2 className="w-4 h-4" /> Resolve
+                    <CheckCircle2 className="w-4 h-4" /> {t('adminResolve', lang)}
                   </button>
                 </div>
               )}

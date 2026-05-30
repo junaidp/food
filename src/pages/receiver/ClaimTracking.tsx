@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../lib/api';
 import { useNotifications } from '../../context/NotificationContext';
+import { useLanguage } from '../../context/LanguageContext';
+import { t } from '../../lib/translations';
 import { getSocket } from '../../lib/socket';
 import MapView from '../../components/MapView';
 import { ArrowLeft, MapPin, Phone, Clock, Navigation } from 'lucide-react';
@@ -20,6 +22,7 @@ export default function ClaimTracking() {
   const { claimId } = useParams<{ claimId: string }>();
   const navigate = useNavigate();
   const { addToast } = useNotifications();
+  const { lang } = useLanguage();
   const [claim, setClaim] = useState<ExtendedClaim | null>(null);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [donorLocation, setDonorLocation] = useState<{ lat: number; lng: number } | null>(null);
@@ -93,9 +96,9 @@ export default function ClaimTracking() {
     if (!claimId) return;
     try {
       await api.put(`/claims/${claimId}/arrived`);
-      addToast('Donor Notified! 📍', 'They know you have arrived.', 'success');
+      addToast(t('rcDonorNotified', lang).split('.')[0], t('rcDonorNotified', lang), 'success');
     } catch (err: any) {
-      addToast('Error', err.response?.data?.error || 'Failed', 'error');
+      addToast(t('error', lang), err.response?.data?.error || t('error', lang), 'error');
     }
   };
 
@@ -116,9 +119,9 @@ export default function ClaimTracking() {
   if (!claim) {
     return (
       <div className="p-8 text-center">
-        <p className="text-gray-500">Claim not found.</p>
+        <p className="text-gray-500">{t('ctClaimNotFound', lang)}</p>
         <button onClick={() => navigate('/receiver/claims')} className="btn-secondary mt-4">
-          Back to Claims
+          {t('ctBackToClaims', lang)}
         </button>
       </div>
     );
@@ -142,12 +145,12 @@ export default function ClaimTracking() {
           </button>
           <div className="flex-1">
             <h3 className="font-bold text-sm">{claim.listing_title}</h3>
-            <p className="text-xs text-gray-500">Navigate to pickup location</p>
+            <p className="text-xs text-gray-500">{t('ctNavigate', lang)}</p>
           </div>
           {claim.expires_at && (
             <div className="text-right">
-              <p className="text-xs text-gray-400">Time left</p>
-              <TimerDisplay expiresAt={claim.expires_at} />
+              <p className="text-xs text-gray-400">{t('ctTimeLeft', lang)}</p>
+              <TimerDisplay expiresAt={claim.expires_at} lang={lang} />
             </div>
           )}
         </div>
@@ -158,17 +161,17 @@ export default function ClaimTracking() {
         <div className="bg-white/95 backdrop-blur-sm rounded-t-2xl shadow-2xl p-5">
           {/* Pickup code */}
           <div className="bg-green-50 rounded-xl p-3 mb-4 text-center">
-            <p className="text-xs text-green-600">Pickup Code</p>
+            <p className="text-xs text-green-600">{t('ctPickupCode', lang)}</p>
             <p className="text-2xl font-mono font-bold text-green-800 tracking-widest">{claim.pickup_code}</p>
           </div>
 
           <div className="grid grid-cols-2 gap-3 mb-4">
             <div className="bg-gray-50 rounded-xl p-2.5 text-center">
-              <p className="text-xs text-gray-500">Donor</p>
+              <p className="text-xs text-gray-500">{t('mapDonor', lang)}</p>
               <p className="font-semibold text-sm truncate">{claim.donor_name}</p>
             </div>
             <div className="bg-gray-50 rounded-xl p-2.5 text-center">
-              <p className="text-xs text-gray-500">Distance</p>
+              <p className="text-xs text-gray-500">{t('mapDistance', lang)}</p>
               <p className="font-semibold text-sm">
                 {userLocation && donorLocation
                   ? formatDistance(userLocation.lat, userLocation.lng, donorLocation.lat, donorLocation.lng)
@@ -180,7 +183,7 @@ export default function ClaimTracking() {
           {/* Instructions */}
           <div className="bg-blue-50 rounded-xl p-3 mb-4">
             <p className="text-xs text-blue-800 text-center">
-              📍 <strong>When you arrive:</strong> Tap "I've Arrived" to notify the donor. No need to call or ring the doorbell!
+              📍 {t('ctInstructions', lang)}
             </p>
           </div>
 
@@ -190,17 +193,17 @@ export default function ClaimTracking() {
               onClick={notifyArrival} 
               className="w-full btn-primary py-3.5 text-base font-bold flex items-center justify-center gap-2 shadow-lg"
             >
-              <MapPin className="w-5 h-5" /> I've Arrived - Notify Donor
+              <MapPin className="w-5 h-5" /> {t('ctIveArrivedNotify', lang)}
             </button>
             
             {/* Secondary Actions */}
             <div className="grid grid-cols-2 gap-2">
               <button onClick={openExternalNav} className="btn-secondary py-2.5 text-sm flex items-center justify-center gap-1">
-                <Navigation className="w-4 h-4" /> Navigate
+                <Navigation className="w-4 h-4" /> {t('ctNavigateBtn', lang)}
               </button>
               {claim.donor_phone && (
                 <a href={`tel:${claim.donor_phone}`} className="btn-secondary py-2.5 text-sm flex items-center justify-center gap-1">
-                  <Phone className="w-4 h-4" /> Call
+                  <Phone className="w-4 h-4" /> {t('ctCall', lang)}
                 </a>
               )}
             </div>
@@ -211,15 +214,15 @@ export default function ClaimTracking() {
   );
 }
 
-function TimerDisplay({ expiresAt }: { expiresAt: string }) {
-  const [time, setTime] = useState(getPickupTimeRemaining(expiresAt));
+function TimerDisplay({ expiresAt, lang }: { expiresAt: string; lang: 'en' | 'ur' }) {
+  const [time, setTime] = useState(getPickupTimeRemaining(expiresAt, lang));
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTime(getPickupTimeRemaining(expiresAt));
+      setTime(getPickupTimeRemaining(expiresAt, lang));
     }, 1000);
     return () => clearInterval(interval);
-  }, [expiresAt]);
+  }, [expiresAt, lang]);
 
   return <span className="font-mono font-bold text-amber-600 text-sm">{time}</span>;
 }

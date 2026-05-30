@@ -1,10 +1,13 @@
 import { useEffect } from 'react';
 import { useNotifications } from '../context/NotificationContext';
+import { useLanguage } from '../context/LanguageContext';
+import { t } from '../lib/translations';
 import { Bell, Check, CheckCheck } from 'lucide-react';
 import { formatTimeAgo } from '../lib/utils';
 
 export default function NotificationsPage() {
   const { notifications, fetchNotifications, markAsRead, markAllAsRead, unreadCount } = useNotifications();
+  const { lang } = useLanguage();
 
   useEffect(() => {
     fetchNotifications();
@@ -27,12 +30,12 @@ export default function NotificationsPage() {
     <div className="p-4 md:p-8 max-w-2xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Notifications</h1>
-          <p className="text-gray-500 text-sm mt-1">{unreadCount} unread</p>
+          <h1 className="text-2xl font-bold text-gray-900">{t('notifTitle', lang)}</h1>
+          <p className="text-gray-500 text-sm mt-1">{t('notifUnread', lang, { count: unreadCount })}</p>
         </div>
         {unreadCount > 0 && (
           <button onClick={markAllAsRead} className="btn-secondary py-2 px-4 text-sm flex items-center gap-1">
-            <CheckCheck className="w-4 h-4" /> Mark all read
+            <CheckCheck className="w-4 h-4" /> {t('notifMarkAllRead', lang)}
           </button>
         )}
       </div>
@@ -40,8 +43,8 @@ export default function NotificationsPage() {
       {notifications.length === 0 ? (
         <div className="card text-center py-12">
           <Bell className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-          <h3 className="text-lg font-semibold text-gray-900">No notifications yet</h3>
-          <p className="text-gray-500 mt-1">You'll receive updates about your food activities here.</p>
+          <h3 className="text-lg font-semibold text-gray-900">{t('notifNoNotifications', lang)}</h3>
+          <p className="text-gray-500 mt-1">{t('notifReceiveUpdates', lang)}</p>
         </div>
       ) : (
         <div className="space-y-2">
@@ -60,7 +63,7 @@ export default function NotificationsPage() {
                     <p className={`text-sm ${!n.is_read ? 'font-semibold text-gray-900' : 'text-gray-700'}`}>
                       {n.title}
                     </p>
-                    <span className="text-xs text-gray-400 flex-shrink-0">{formatTimeAgo(n.created_at)}</span>
+                    <span className="text-xs text-gray-400 flex-shrink-0">{formatTimeAgo(n.created_at, lang)}</span>
                   </div>
                   <p className="text-sm text-gray-500 mt-0.5">{n.message}</p>
                 </div>

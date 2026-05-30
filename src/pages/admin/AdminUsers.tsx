@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import api from '../../lib/api';
 import { useNotifications } from '../../context/NotificationContext';
+import { useLanguage } from '../../context/LanguageContext';
+import { t } from '../../lib/translations';
 import { Shield, ShieldOff, UserCheck, UserX, Star, Search } from 'lucide-react';
 import { formatTimeAgo } from '../../lib/utils';
 
@@ -22,6 +24,7 @@ export default function AdminUsers() {
   const [search, setSearch] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
   const { addToast } = useNotifications();
+  const { lang } = useLanguage();
 
   const fetchUsers = async () => {
     try {
@@ -39,20 +42,20 @@ export default function AdminUsers() {
   const toggleVerify = async (id: string) => {
     try {
       await api.put(`/admin/users/${id}/verify`);
-      addToast('Updated', 'User verification toggled.', 'success');
+      addToast(t('adminUpdated', lang), t('adminUserVerificationToggled', lang), 'success');
       fetchUsers();
     } catch {
-      addToast('Error', 'Failed to update user.', 'error');
+      addToast(t('error', lang), t('adminFailedUpdateUser', lang), 'error');
     }
   };
 
   const toggleBlock = async (id: string) => {
     try {
       await api.put(`/admin/users/${id}/block`);
-      addToast('Updated', 'User block status toggled.', 'success');
+      addToast(t('adminUpdated', lang), t('adminUserBlockToggled', lang), 'success');
       fetchUsers();
     } catch {
-      addToast('Error', 'Failed to update user.', 'error');
+      addToast(t('error', lang), t('adminFailedUpdateUser', lang), 'error');
     }
   };
 
@@ -72,7 +75,7 @@ export default function AdminUsers() {
 
   return (
     <div className="p-4 md:p-8 max-w-5xl mx-auto">
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Manage Users</h1>
+      <h1 className="text-2xl font-bold text-gray-900 mb-6">{t('adminManageUsersTitle', lang)}</h1>
 
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
@@ -83,7 +86,7 @@ export default function AdminUsers() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="input-field pl-11"
-            placeholder="Search by name or phone..."
+            placeholder={t('adminSearch', lang)}
           />
         </div>
         <div className="flex gap-2">
@@ -95,7 +98,7 @@ export default function AdminUsers() {
                 roleFilter === r ? 'bg-primary-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
-              {r.charAt(0).toUpperCase() + r.slice(1)}
+              {r === 'all' ? t('adminAll', lang) : r.charAt(0).toUpperCase() + r.slice(1)}
             </button>
           ))}
         </div>
@@ -117,7 +120,7 @@ export default function AdminUsers() {
               <div className="flex items-center gap-2">
                 <p className="font-semibold text-gray-900 truncate">{u.name}</p>
                 {u.is_verified && <span className="text-green-500 text-xs">✅</span>}
-                {u.is_blocked && <span className="text-red-500 text-xs font-medium">BLOCKED</span>}
+                {u.is_blocked && <span className="text-red-500 text-xs font-medium">{t('adminBlocked', lang)}</span>}
               </div>
               <div className="flex items-center gap-3 text-xs text-gray-500">
                 <span>{u.phone}</span>
@@ -127,7 +130,7 @@ export default function AdminUsers() {
                     <Star className="w-3 h-3 text-amber-500" /> {u.avg_rating} ({u.rating_count})
                   </span>
                 )}
-                <span>{formatTimeAgo(u.created_at)}</span>
+                <span>{formatTimeAgo(u.created_at, lang)}</span>
               </div>
             </div>
 
@@ -137,7 +140,7 @@ export default function AdminUsers() {
                 className={`p-2 rounded-lg transition-colors ${
                   u.is_verified ? 'bg-green-100 text-green-600 hover:bg-green-200' : 'bg-gray-100 text-gray-400 hover:bg-gray-200'
                 }`}
-                title={u.is_verified ? 'Unverify' : 'Verify'}
+                title={u.is_verified ? t('adminUnverify', lang) : t('adminVerifyBtn', lang)}
               >
                 {u.is_verified ? <UserCheck className="w-5 h-5" /> : <UserX className="w-5 h-5" />}
               </button>
@@ -146,7 +149,7 @@ export default function AdminUsers() {
                 className={`p-2 rounded-lg transition-colors ${
                   u.is_blocked ? 'bg-red-100 text-red-600 hover:bg-red-200' : 'bg-gray-100 text-gray-400 hover:bg-gray-200'
                 }`}
-                title={u.is_blocked ? 'Unblock' : 'Block'}
+                title={u.is_blocked ? t('adminUnblock', lang) : t('adminBlockBtn', lang)}
               >
                 {u.is_blocked ? <ShieldOff className="w-5 h-5" /> : <Shield className="w-5 h-5" />}
               </button>
@@ -157,7 +160,7 @@ export default function AdminUsers() {
 
       {filtered.length === 0 && (
         <div className="card text-center py-8">
-          <p className="text-gray-500">No users found.</p>
+          <p className="text-gray-500">{t('adminNoUsersFound', lang)}</p>
         </div>
       )}
     </div>

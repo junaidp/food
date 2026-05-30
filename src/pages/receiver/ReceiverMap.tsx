@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import api from '../../lib/api';
 import { useNotifications } from '../../context/NotificationContext';
+import { useLanguage } from '../../context/LanguageContext';
+import { t } from '../../lib/translations';
 import MapView from '../../components/MapView';
 import { MapPin, Clock, User, Navigation, X } from 'lucide-react';
 import { formatDistance, formatExpiry } from '../../lib/utils';
@@ -13,6 +15,7 @@ export default function ReceiverMap() {
   const [loading, setLoading] = useState(true);
   const [claiming, setClaiming] = useState(false);
   const { addToast } = useNotifications();
+  const { lang } = useLanguage();
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -43,11 +46,11 @@ export default function ReceiverMap() {
     setClaiming(true);
     try {
       await api.post('/claims', { listing_id: listingId });
-      addToast('Request Sent! 🙏', 'The donor has been notified. Please wait for acceptance.', 'success');
+      addToast(t('success', lang), t('mapRequestSent', lang), 'success');
       setSelected(null);
       fetchListings();
     } catch (err: any) {
-      addToast('Error', err.response?.data?.error || 'Failed to claim food', 'error');
+      addToast(t('error', lang), err.response?.data?.error || t('mapFailedClaim', lang), 'error');
     } finally {
       setClaiming(false);
     }
@@ -68,7 +71,7 @@ export default function ReceiverMap() {
         <div className="inline-flex items-center gap-2 bg-white/95 backdrop-blur-sm rounded-xl px-4 py-2.5 shadow-lg pointer-events-auto">
           <MapPin className="w-4 h-4 text-primary-600" />
           <span className="text-sm font-semibold">
-            {loading ? 'Loading...' : `${listings.length} food available nearby`}
+            {loading ? t('loadingDots', lang) : t('mapFoodNearby', lang, { count: listings.length })}
           </span>
         </div>
       </div>
@@ -96,9 +99,9 @@ export default function ReceiverMap() {
                       <div>
                         <p className="font-semibold text-gray-900 text-sm">{listing.title}</p>
                         <div className="flex items-center gap-2 text-xs text-gray-500 mt-0.5">
-                          {listing.donor_name && <span>By {listing.donor_name}</span>}
+                          {listing.donor_name && <span>{t('mapByDonor', lang, { name: listing.donor_name })}</span>}
                           <span className="flex items-center gap-0.5">
-                            <Clock className="w-3 h-3" /> {formatExpiry(listing.expires_at)}
+                            <Clock className="w-3 h-3" /> {formatExpiry(listing.expires_at, lang)}
                           </span>
                         </div>
                       </div>
@@ -131,7 +134,7 @@ export default function ReceiverMap() {
                 <div>
                   <h3 className="text-lg font-bold text-gray-900">{selected.title}</h3>
                   <p className="text-sm text-gray-500">
-                    {selected.remaining_quantity} serving{selected.remaining_quantity !== 1 ? 's' : ''} available
+                    {t('mapServingAvailable', lang, { count: selected.remaining_quantity }).replace('{{count}}', String(selected.remaining_quantity))}
                   </p>
                 </div>
               </div>
@@ -147,19 +150,19 @@ export default function ReceiverMap() {
               {selected.donor_name && (
                 <div className="text-center p-2 bg-gray-50 rounded-xl">
                   <User className="w-4 h-4 text-gray-400 mx-auto mb-1" />
-                  <p className="text-xs text-gray-500">Donor</p>
+                  <p className="text-xs text-gray-500">{t('mapDonor', lang)}</p>
                   <p className="text-sm font-semibold truncate">{selected.donor_name}</p>
                 </div>
               )}
               <div className="text-center p-2 bg-gray-50 rounded-xl">
                 <Clock className="w-4 h-4 text-gray-400 mx-auto mb-1" />
-                <p className="text-xs text-gray-500">Expires</p>
-                <p className="text-sm font-semibold">{formatExpiry(selected.expires_at)}</p>
+                <p className="text-xs text-gray-500">{t('mapExpires', lang)}</p>
+                <p className="text-sm font-semibold">{formatExpiry(selected.expires_at, lang)}</p>
               </div>
               {userLocation && (
                 <div className="text-center p-2 bg-gray-50 rounded-xl">
                   <Navigation className="w-4 h-4 text-gray-400 mx-auto mb-1" />
-                  <p className="text-xs text-gray-500">Distance</p>
+                  <p className="text-xs text-gray-500">{t('mapDistance', lang)}</p>
                   <p className="text-sm font-semibold">
                     {formatDistance(userLocation.lat, userLocation.lng, selected.latitude, selected.longitude)}
                   </p>
@@ -184,11 +187,11 @@ export default function ReceiverMap() {
               {claiming ? (
                 <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
               ) : (
-                '🙋 Request This Food'
+                `🙋 ${t('mapRequestFood', lang)}`
               )}
             </button>
             <p className="text-center text-xs text-gray-400 mt-2">
-              One person, one serving. The donor will be notified immediately.
+              {t('mapOnePersonOneServing', lang)}
             </p>
           </div>
         </div>

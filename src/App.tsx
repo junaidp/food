@@ -1,5 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
+import { useLanguage } from './context/LanguageContext';
+import { t } from './lib/translations';
 import Layout from './components/Layout';
 import ToastContainer from './components/ToastContainer';
 import InstallPrompt from './components/InstallPrompt';
@@ -39,6 +41,7 @@ function ProtectedRoute({ children, roles }: { children: React.ReactNode; roles?
 
 function AppRoutes() {
   const { user, loading } = useAuth();
+  const { lang } = useLanguage();
 
   if (loading) {
     return (
@@ -46,7 +49,7 @@ function AppRoutes() {
         <div className="text-center">
           <div className="text-5xl mb-4">🍽️</div>
           <div className="animate-spin rounded-full h-10 w-10 border-4 border-primary-500 border-t-transparent mx-auto" />
-          <p className="mt-4 text-gray-500 font-medium">Loading FoodShare...</p>
+          <p className="mt-4 text-gray-500 font-medium">{t('loading', lang)}</p>
         </div>
       </div>
     );

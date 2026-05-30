@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../lib/api';
 import { useNotifications } from '../../context/NotificationContext';
+import { useLanguage } from '../../context/LanguageContext';
+import { t } from '../../lib/translations';
 import { Clock, MapPin, Star, X, Navigation } from 'lucide-react';
 import { formatTimeAgo, getPickupTimeRemaining } from '../../lib/utils';
 import type { Claim } from '../../../shared/types';
@@ -21,6 +23,7 @@ export default function ReceiverClaims() {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
   const { addToast } = useNotifications();
+  const { lang } = useLanguage();
 
   const fetchClaims = async () => {
     try {
@@ -40,35 +43,35 @@ export default function ReceiverClaims() {
   }, []);
 
   const cancelClaim = async (id: string) => {
-    if (!confirm('Cancel this food request?')) return;
+    if (!confirm(t('rcCancelConfirm', lang))) return;
     try {
       await api.put(`/claims/${id}/cancel`);
-      addToast('Cancelled', 'Request cancelled.', 'info');
+      addToast(t('rcCancelled', lang).split('.')[0], t('rcCancelled', lang), 'info');
       fetchClaims();
     } catch (err: any) {
-      addToast('Error', err.response?.data?.error || 'Failed to cancel', 'error');
+      addToast(t('error', lang), err.response?.data?.error || t('rcFailedCancel', lang), 'error');
     }
   };
 
   const notifyArrival = async (id: string) => {
     try {
       await api.put(`/claims/${id}/arrived`);
-      addToast('Notified! 📍', 'The donor knows you have arrived.', 'success');
+      addToast(t('rcDonorNotified', lang).split('.')[0], t('rcDonorNotified', lang), 'success');
     } catch (err: any) {
-      addToast('Error', err.response?.data?.error || 'Failed to notify', 'error');
+      addToast(t('error', lang), err.response?.data?.error || t('rcFailedNotify', lang), 'error');
     }
   };
 
   const submitRating = async (claimId: string) => {
     try {
       await api.post('/ratings', { claim_id: claimId, rating, comment: comment || undefined });
-      addToast('Thank you! ⭐', 'Your rating has been submitted.', 'success');
+      addToast(t('rcThankYouRating', lang).split('.')[0], t('rcThankYouRating', lang), 'success');
       setRatingClaim(null);
       setRating(5);
       setComment('');
       fetchClaims();
     } catch (err: any) {
-      addToast('Error', err.response?.data?.error || 'Failed to rate', 'error');
+      addToast(t('error', lang), err.response?.data?.error || t('rcFailedRate', lang), 'error');
     }
   };
 
@@ -86,13 +89,13 @@ export default function ReceiverClaims() {
 
   return (
     <div className="p-4 md:p-8 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold text-gray-900 mb-2">My Food Claims 🙋</h1>
-      <p className="text-gray-500 mb-6">Track your food requests</p>
+      <h1 className="text-2xl font-bold text-gray-900 mb-2">{t('rcTitle', lang)} 🙋</h1>
+      <p className="text-gray-500 mb-6">{t('rcTrack', lang)}</p>
 
       {/* Active claims */}
       {active.length > 0 && (
         <section className="mb-8">
-          <h2 className="text-lg font-bold text-primary-600 mb-4">Active Claims ({active.length})</h2>
+          <h2 className="text-lg font-bold text-primary-600 mb-4">{t('rcActive', lang)} ({active.length})</h2>
           <div className="space-y-4">
             {active.map((claim) => (
               <div key={claim.id} className={`card border-l-4 ${claim.status === 'accepted' ? 'border-l-green-500' : 'border-l-amber-400'}`}>
@@ -103,17 +106,17 @@ export default function ReceiverClaims() {
                       <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                         claim.status === 'accepted' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
                       }`}>
-                        {claim.status === 'pending' ? 'Waiting for donor...' : 'Accepted!'}
+                        {claim.status === 'pending' ? t('rcWaitingDonor', lang) : t('rcAccepted', lang)}
                       </span>
                     </div>
                     {claim.donor_name && (
-                      <p className="text-sm text-gray-500 mt-1">Donor: {claim.donor_name}</p>
+                      <p className="text-sm text-gray-500 mt-1">{t('rcDonor', lang, { name: claim.donor_name })}</p>
                     )}
                   </div>
                   <button
                     onClick={() => cancelClaim(claim.id)}
                     className="p-2 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors"
-                    title="Cancel"
+                    title={t('cancel', lang)}
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -123,19 +126,19 @@ export default function ReceiverClaims() {
                   <>
                     {/* Pickup code */}
                     <div className="bg-green-50 rounded-xl p-4 mb-3 text-center">
-                      <p className="text-sm text-green-700 mb-1">Your Pickup Code</p>
+                      <p className="text-sm text-green-700 mb-1">{t('rcPickupCode', lang)}</p>
                       <p className="text-3xl font-mono font-bold text-green-800 tracking-widest">
                         {claim.pickup_code}
                       </p>
-                      <p className="text-xs text-green-600 mt-1">Show this code to the donor at pickup</p>
+                      <p className="text-xs text-green-600 mt-1">{t('rcShowCode', lang)}</p>
                     </div>
 
                     {/* Timer */}
                     {claim.expires_at && (
                       <div className="flex items-center justify-center gap-2 text-amber-600 mb-3">
                         <Clock className="w-4 h-4" />
-                        <span className="text-sm font-medium">Time remaining: </span>
-                        <TimerDisplay expiresAt={claim.expires_at} />
+                        <span className="text-sm font-medium">{t('rcTimeRemaining', lang)} </span>
+                        <TimerDisplay expiresAt={claim.expires_at} lang={lang} />
                       </div>
                     )}
 
@@ -144,13 +147,13 @@ export default function ReceiverClaims() {
                         onClick={() => notifyArrival(claim.id)}
                         className="btn-primary py-2.5 text-sm flex items-center justify-center gap-1"
                       >
-                        <MapPin className="w-4 h-4" /> I've Arrived
+                        <MapPin className="w-4 h-4" /> {t('rcIveArrived', lang)}
                       </button>
                       <Link
                         to={`/receiver/tracking/${claim.id}`}
                         className="btn-secondary py-2.5 text-sm flex items-center justify-center gap-1"
                       >
-                        <Navigation className="w-4 h-4" /> Navigate
+                        <Navigation className="w-4 h-4" /> {t('rcNavigate', lang)}
                       </Link>
                     </div>
                   </>
@@ -159,7 +162,7 @@ export default function ReceiverClaims() {
                 {claim.status === 'pending' && (
                   <div className="bg-amber-50 rounded-xl p-3 text-center">
                     <div className="animate-pulse text-amber-600 text-sm">
-                      ⏳ Waiting for donor to accept your request...
+                      ⏳ {t('rcWaitingAccept', lang)}
                     </div>
                   </div>
                 )}
@@ -172,7 +175,7 @@ export default function ReceiverClaims() {
       {/* Completed */}
       {completed.length > 0 && (
         <section className="mb-8">
-          <h2 className="text-lg font-bold text-green-600 mb-4">Completed ({completed.length})</h2>
+          <h2 className="text-lg font-bold text-green-600 mb-4">{t('rcCompleted', lang)} ({completed.length})</h2>
           <div className="space-y-3">
             {completed.map((claim) => (
               <div key={claim.id} className="card">
@@ -180,20 +183,20 @@ export default function ReceiverClaims() {
                   <div>
                     <p className="font-semibold text-gray-900">{claim.listing_title}</p>
                     <p className="text-xs text-gray-500">
-                      {claim.donor_name} · {formatTimeAgo(claim.picked_up_at || claim.created_at)}
+                      {claim.donor_name} · {formatTimeAgo(claim.picked_up_at || claim.created_at, lang)}
                     </p>
                   </div>
                   <button
                     onClick={() => setRatingClaim(claim.id)}
                     className="flex items-center gap-1 text-sm text-amber-500 hover:text-amber-600 font-semibold"
                   >
-                    <Star className="w-4 h-4" /> Rate
+                    <Star className="w-4 h-4" /> {t('rcRate', lang)}
                   </button>
                 </div>
 
                 {ratingClaim === claim.id && (
                   <div className="mt-4 bg-gray-50 rounded-xl p-4 animate-slide-up">
-                    <p className="text-sm font-medium text-gray-700 mb-3">Rate this experience</p>
+                    <p className="text-sm font-medium text-gray-700 mb-3">{t('rcRateExperience', lang)}</p>
                     <div className="flex gap-1 mb-3">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <button
@@ -210,14 +213,14 @@ export default function ReceiverClaims() {
                       onChange={(e) => setComment(e.target.value)}
                       className="input-field text-sm mb-3"
                       rows={2}
-                      placeholder="Optional comment..."
+                      placeholder={t('rcOptionalComment', lang)}
                     />
                     <div className="flex gap-2">
                       <button onClick={() => submitRating(claim.id)} className="btn-primary py-2 text-sm flex-1">
-                        Submit Rating
+                        {t('rcSubmitRating', lang)}
                       </button>
                       <button onClick={() => setRatingClaim(null)} className="btn-secondary py-2 text-sm">
-                        Cancel
+                        {t('cancel', lang)}
                       </button>
                     </div>
                   </div>
@@ -231,7 +234,7 @@ export default function ReceiverClaims() {
       {/* Other */}
       {other.length > 0 && (
         <section>
-          <h2 className="text-lg font-bold text-gray-400 mb-4">Past ({other.length})</h2>
+          <h2 className="text-lg font-bold text-gray-400 mb-4">{t('rcPast', lang)} ({other.length})</h2>
           <div className="space-y-2">
             {other.map((claim) => (
               <div key={claim.id} className="card py-3 opacity-50">
@@ -248,10 +251,10 @@ export default function ReceiverClaims() {
       {claims.length === 0 && (
         <div className="card text-center py-12">
           <div className="text-5xl mb-4">🗺️</div>
-          <h3 className="text-lg font-semibold text-gray-900">No claims yet</h3>
-          <p className="text-gray-500 mt-1">Find nearby food on the map and request it!</p>
+          <h3 className="text-lg font-semibold text-gray-900">{t('rcNoClaims', lang)}</h3>
+          <p className="text-gray-500 mt-1">{t('rcFindNearby', lang)}</p>
           <Link to="/receiver" className="btn-orange mt-4 inline-flex items-center gap-2">
-            <MapPin className="w-5 h-5" /> Open Map
+            <MapPin className="w-5 h-5" /> {t('rcOpenMap', lang)}
           </Link>
         </div>
       )}
@@ -259,15 +262,15 @@ export default function ReceiverClaims() {
   );
 }
 
-function TimerDisplay({ expiresAt }: { expiresAt: string }) {
-  const [time, setTime] = useState(getPickupTimeRemaining(expiresAt));
+function TimerDisplay({ expiresAt, lang }: { expiresAt: string; lang: 'en' | 'ur' }) {
+  const [time, setTime] = useState(getPickupTimeRemaining(expiresAt, lang));
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTime(getPickupTimeRemaining(expiresAt));
+      setTime(getPickupTimeRemaining(expiresAt, lang));
     }, 1000);
     return () => clearInterval(interval);
-  }, [expiresAt]);
+  }, [expiresAt, lang]);
 
   return <span className="font-mono font-bold">{time}</span>;
 }

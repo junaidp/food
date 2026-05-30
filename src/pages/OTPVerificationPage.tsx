@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
+import { t } from '../lib/translations';
 import api from '../lib/api';
 import { Shield, ArrowLeft } from 'lucide-react';
 
@@ -13,6 +15,7 @@ export default function OTPVerificationPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { updateUser } = useAuth();
+  const { lang } = useLanguage();
 
   const phone = location.state?.phone;
 
@@ -44,7 +47,7 @@ export default function OTPVerificationPage() {
       
       navigate('/');
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Verification failed');
+      setError(err.response?.data?.error || t('otpVerificationFailed', lang));
     } finally {
       setLoading(false);
     }
@@ -61,7 +64,7 @@ export default function OTPVerificationPage() {
       setCountdown(120);
       setOtp('');
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to resend OTP');
+      setError(err.response?.data?.error || t('otpFailedResend', lang));
     } finally {
       setResending(false);
     }
@@ -80,9 +83,9 @@ export default function OTPVerificationPage() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-primary-100 rounded-full mb-4">
             <Shield className="w-8 h-8 text-primary-600" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">Verify Your Phone</h1>
+          <h1 className="text-3xl font-bold text-gray-900">{t('otpVerifyPhone', lang)}</h1>
           <p className="text-gray-500 mt-2">
-            Enter the 6-digit code sent to<br />
+            {t('otpEnterCode', lang)}<br />
             <span className="font-semibold text-gray-700">{phone}</span>
           </p>
         </div>
@@ -97,7 +100,7 @@ export default function OTPVerificationPage() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5 text-center">
-                Verification Code
+                {t('otpVerificationCode', lang)}
               </label>
               <input
                 type="text"
@@ -119,7 +122,7 @@ export default function OTPVerificationPage() {
               {loading ? (
                 <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent mx-auto" />
               ) : (
-                'Verify & Continue'
+                t('otpVerifyContinue', lang)
               )}
             </button>
           </form>
@@ -127,7 +130,7 @@ export default function OTPVerificationPage() {
           <div className="mt-6 text-center">
             {countdown > 0 ? (
               <p className="text-sm text-gray-500">
-                Resend code in <span className="font-semibold text-primary-600">{formatTime(countdown)}</span>
+                {t('otpResendIn', lang)} <span className="font-semibold text-primary-600">{formatTime(countdown)}</span>
               </p>
             ) : (
               <button
@@ -135,7 +138,7 @@ export default function OTPVerificationPage() {
                 disabled={resending}
                 className="text-sm text-primary-600 font-semibold hover:underline disabled:opacity-50"
               >
-                {resending ? 'Sending...' : 'Resend OTP'}
+                {resending ? t('otpSending', lang) : t('otpResendOTP', lang)}
               </button>
             )}
           </div>
@@ -145,13 +148,13 @@ export default function OTPVerificationPage() {
             className="w-full mt-4 flex items-center justify-center gap-2 text-sm text-gray-600 hover:text-gray-800"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to Registration
+            {t('otpBackToRegister', lang)}
           </button>
         </div>
 
         <div className="mt-6 bg-blue-50 rounded-xl p-4">
           <p className="text-xs text-blue-800 text-center">
-            📱 A 6-digit verification code has been sent to your mobile number via SMS
+            📱 {t('otpSmsSent', lang)}
           </p>
         </div>
       </div>

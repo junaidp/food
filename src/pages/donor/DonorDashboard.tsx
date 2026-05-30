@@ -2,12 +2,15 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../lib/api';
 import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
+import { t } from '../../lib/translations';
 import { PlusCircle, Eye, EyeOff, Trash2, Clock, Users, ChefHat } from 'lucide-react';
 import { formatExpiry, formatTimeAgo } from '../../lib/utils';
 import type { FoodListing } from '../../../shared/types';
 
 export default function DonorDashboard() {
   const { user } = useAuth();
+  const { lang } = useLanguage();
   const [listings, setListings] = useState<(FoodListing & { pending_claims?: number; active_claims?: number })[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -36,7 +39,7 @@ export default function DonorDashboard() {
   };
 
   const deleteListing = async (id: string) => {
-    if (!confirm('Delete this listing?')) return;
+    if (!confirm(t('donorDeleteConfirm', lang))) return;
     try {
       await api.delete(`/listings/${id}`);
       fetchListings();
@@ -56,9 +59,9 @@ export default function DonorDashboard() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900">
-          Welcome back, {user?.name} 🥗
+          {t('donorWelcome', lang, { name: user?.name || '' })} 🥗
         </h1>
-        <p className="text-gray-500 mt-1">Manage your food listings</p>
+        <p className="text-gray-500 mt-1">{t('donorManageListings', lang)}</p>
       </div>
 
       {/* Stats */}
@@ -66,17 +69,17 @@ export default function DonorDashboard() {
         <div className="card text-center">
           <ChefHat className="w-6 h-6 text-primary-500 mx-auto mb-2" />
           <p className="text-2xl font-bold text-gray-900">{listings.length}</p>
-          <p className="text-xs text-gray-500">Total Listings</p>
+          <p className="text-xs text-gray-500">{t('donorTotalListings', lang)}</p>
         </div>
         <div className="card text-center">
           <Eye className="w-6 h-6 text-green-500 mx-auto mb-2" />
           <p className="text-2xl font-bold text-gray-900">{activeCount}</p>
-          <p className="text-xs text-gray-500">Active Now</p>
+          <p className="text-xs text-gray-500">{t('donorActiveNow', lang)}</p>
         </div>
         <div className="card text-center">
           <Users className="w-6 h-6 text-warmOrange-500 mx-auto mb-2" />
           <p className="text-2xl font-bold text-gray-900">{totalServed}</p>
-          <p className="text-xs text-gray-500">People Served</p>
+          <p className="text-xs text-gray-500">{t('donorPeopleServed', lang)}</p>
         </div>
       </div>
 
@@ -86,7 +89,7 @@ export default function DonorDashboard() {
         className="btn-primary w-full flex items-center justify-center gap-2 mb-8"
       >
         <PlusCircle className="w-5 h-5" />
-        Add Food Listing
+        {t('donorAddListing', lang)}
       </Link>
 
       {/* Listings */}
@@ -97,8 +100,8 @@ export default function DonorDashboard() {
       ) : listings.length === 0 ? (
         <div className="card text-center py-12">
           <div className="text-5xl mb-4">🍽️</div>
-          <h3 className="text-lg font-semibold text-gray-900">No listings yet</h3>
-          <p className="text-gray-500 mt-1">Start sharing food with your community!</p>
+          <h3 className="text-lg font-semibold text-gray-900">{t('donorNoListings', lang)}</h3>
+          <p className="text-gray-500 mt-1">{t('donorStartSharing', lang)}</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -126,19 +129,19 @@ export default function DonorDashboard() {
                           : 'bg-gray-100 text-gray-600'
                       }`}
                     >
-                      {listing.status}
+                      {t('status' + listing.status.charAt(0).toUpperCase() + listing.status.slice(1), lang)}
                     </span>
                   </div>
 
                   <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500 mt-2">
                     <span className="flex items-center gap-1">
-                      🍽️ <strong>{listing.remaining_quantity}</strong>/{listing.quantity} servings
+                      🍽️ <strong>{listing.remaining_quantity}</strong>/{listing.quantity} {t('donorServings', lang)}
                     </span>
                     <span className="flex items-center gap-1">
                       <Clock className="w-3.5 h-3.5" />
-                      {formatExpiry(listing.expires_at)}
+                      {formatExpiry(listing.expires_at, lang)}
                     </span>
-                    <span>{formatTimeAgo(listing.created_at)}</span>
+                    <span>{formatTimeAgo(listing.created_at, lang)}</span>
                   </div>
 
                   {(listing.pending_claims && listing.pending_claims > 0) ? (
@@ -146,7 +149,7 @@ export default function DonorDashboard() {
                       to="/donor/claims"
                       className="inline-flex items-center gap-1 mt-2 text-sm text-warmOrange-600 font-semibold hover:underline"
                     >
-                      🔔 {listing.pending_claims} pending request(s)
+                      🔔 {t('donorPendingRequests', lang, { count: listing.pending_claims })}
                     </Link>
                   ) : null}
                 </div>
@@ -159,14 +162,14 @@ export default function DonorDashboard() {
                         ? 'bg-green-100 text-green-600 hover:bg-green-200'
                         : 'bg-gray-100 text-gray-400 hover:bg-gray-200'
                     }`}
-                    title={listing.is_available ? 'Turn off' : 'Turn on'}
+                    title={listing.is_available ? t('donorTurnOff', lang) : t('donorTurnOn', lang)}
                   >
                     {listing.is_available ? <Eye className="w-5 h-5" /> : <EyeOff className="w-5 h-5" />}
                   </button>
                   <button
                     onClick={() => deleteListing(listing.id)}
                     className="p-2 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 transition-colors"
-                    title="Delete"
+                    title={t('delete', lang)}
                   >
                     <Trash2 className="w-5 h-5" />
                   </button>

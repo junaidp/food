@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useLanguage } from '../context/LanguageContext';
+import { t } from '../lib/translations';
 import { Download, X } from 'lucide-react';
 
 interface BeforeInstallPromptEvent extends Event {
@@ -9,6 +11,7 @@ interface BeforeInstallPromptEvent extends Event {
 export default function InstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
+  const { lang } = useLanguage();
 
   useEffect(() => {
     const handler = (e: Event) => {
@@ -61,22 +64,22 @@ export default function InstallPrompt() {
           <Download className="w-6 h-6 text-emerald-600" />
         </div>
         <div className="flex-1">
-          <h3 className="font-semibold text-gray-900 mb-1">Install FoodShare</h3>
+          <h3 className="font-semibold text-gray-900 mb-1">{t('installTitle', lang)}</h3>
           <p className="text-sm text-gray-600 mb-3">
-            Install our app for quick access and offline support!
+            {t('installDesc', lang)}
           </p>
           <div className="flex gap-2">
             <button
               onClick={handleInstall}
               className="flex-1 bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-emerald-700 transition-colors"
             >
-              Install
+              {t('installBtn', lang)}
             </button>
             <button
               onClick={handleDismiss}
               className="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium"
             >
-              Not now
+              {t('installNotNow', lang)}
             </button>
           </div>
         </div>

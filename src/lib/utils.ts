@@ -1,3 +1,6 @@
+import { t } from './translations';
+import type { Language } from './translations';
+
 export function formatDistance(lat1: number, lon1: number, lat2: number, lon2: number): string {
   const R = 6371;
   const dLat = toRad(lat2 - lat1);
@@ -18,7 +21,7 @@ function toRad(deg: number): number {
   return (deg * Math.PI) / 180;
 }
 
-export function formatTimeAgo(dateStr: string): string {
+export function formatTimeAgo(dateStr: string, lang: Language = 'en'): string {
   const date = new Date(dateStr);
   const now = new Date();
   const diff = now.getTime() - date.getTime();
@@ -26,33 +29,33 @@ export function formatTimeAgo(dateStr: string): string {
   const hours = Math.floor(mins / 60);
   const days = Math.floor(hours / 24);
 
-  if (mins < 1) return 'Just now';
-  if (mins < 60) return `${mins}m ago`;
-  if (hours < 24) return `${hours}h ago`;
-  return `${days}d ago`;
+  if (mins < 1) return t('justNow', lang);
+  if (mins < 60) return t('minAgo', lang, { m: mins });
+  if (hours < 24) return t('hourAgo', lang, { h: hours });
+  return t('dayAgo', lang, { d: days });
 }
 
-export function formatExpiry(dateStr: string): string {
+export function formatExpiry(dateStr: string, lang: Language = 'en'): string {
   const date = new Date(dateStr);
   const now = new Date();
   const diff = date.getTime() - now.getTime();
 
-  if (diff <= 0) return 'Expired';
+  if (diff <= 0) return t('expired', lang);
 
   const mins = Math.floor(diff / 60000);
   const hours = Math.floor(mins / 60);
 
-  if (mins < 60) return `${mins}m left`;
-  if (hours < 24) return `${hours}h ${mins % 60}m left`;
-  return `${Math.floor(hours / 24)}d ${hours % 24}h left`;
+  if (mins < 60) return t('minsLeft', lang, { m: mins });
+  if (hours < 24) return t('hoursMinsLeft', lang, { h: hours, m: mins % 60 });
+  return t('daysHoursLeft', lang, { d: Math.floor(hours / 24), h: hours % 24 });
 }
 
-export function getPickupTimeRemaining(expiresAt: string): string {
+export function getPickupTimeRemaining(expiresAt: string, lang: Language = 'en'): string {
   const expires = new Date(expiresAt);
   const now = new Date();
   const diff = expires.getTime() - now.getTime();
 
-  if (diff <= 0) return 'Time expired';
+  if (diff <= 0) return t('timeExpired', lang);
 
   const mins = Math.floor(diff / 60000);
   const secs = Math.floor((diff % 60000) / 1000);

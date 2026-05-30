@@ -2,12 +2,15 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../lib/api';
 import { useNotifications } from '../../context/NotificationContext';
+import { useLanguage } from '../../context/LanguageContext';
+import { t } from '../../lib/translations';
 import { MapPin, Clock, ArrowLeft } from 'lucide-react';
 import L from 'leaflet';
 
 export default function CreateListing() {
   const navigate = useNavigate();
   const { addToast } = useNotifications();
+  const { lang } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     title: '',
@@ -80,7 +83,7 @@ export default function CreateListing() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!location) {
-      addToast('Error', 'Please set a location on the map', 'error');
+      addToast(t('error', lang), t('createSetLocationError', lang), 'error');
       return;
     }
 
@@ -97,10 +100,10 @@ export default function CreateListing() {
         address: form.address || undefined,
         expires_at: expiresAt,
       });
-      addToast('Success!', 'Food listing created', 'success');
+      addToast(t('success', lang), t('createSuccess', lang), 'success');
       navigate('/donor');
     } catch (err: any) {
-      addToast('Error', err.response?.data?.error || 'Failed to create listing', 'error');
+      addToast(t('error', lang), err.response?.data?.error || t('createFailed', lang), 'error');
     } finally {
       setLoading(false);
     }
@@ -109,24 +112,24 @@ export default function CreateListing() {
   return (
     <div className="p-4 md:p-8 max-w-2xl mx-auto">
       <button onClick={() => navigate('/donor')} className="flex items-center gap-2 text-gray-500 hover:text-gray-700 mb-6">
-        <ArrowLeft className="w-5 h-5" /> Back
+        <ArrowLeft className="w-5 h-5" /> {t('back', lang)}
       </button>
 
-      <h1 className="text-2xl font-bold text-gray-900 mb-2">Add Food Listing 🥗</h1>
-      <p className="text-gray-500 mb-6">Share your available food with the community</p>
+      <h1 className="text-2xl font-bold text-gray-900 mb-2">{t('createTitle', lang)} 🥗</h1>
+      <p className="text-gray-500 mb-6">{t('createSubtitle', lang)}</p>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Title */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1.5">
-            What food are you sharing? *
+            {t('createWhatFood', lang)}
           </label>
           <input
             type="text"
             value={form.title}
             onChange={(e) => setForm({ ...form, title: e.target.value })}
             className="input-field"
-            placeholder="e.g., Rice with curry, Biryani, Roti with daal"
+            placeholder={t('createFoodPlaceholder', lang)}
             required
           />
         </div>
@@ -134,7 +137,7 @@ export default function CreateListing() {
         {/* Quantity - Main feature with big buttons */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            How many people can this serve? *
+            {t('createHowMany', lang)}
           </label>
           <div className="flex items-center gap-3">
             <button
@@ -152,7 +155,7 @@ export default function CreateListing() {
                 </span>
               </div>
               <p className="text-sm text-gray-500 mt-2">
-                {form.quantity} {form.quantity === 1 ? 'person' : 'people'}
+                {form.quantity} {form.quantity === 1 ? t('createPerson', lang) : t('createPeople', lang)}
               </p>
             </div>
             <button
@@ -168,28 +171,28 @@ export default function CreateListing() {
         {/* Description (optional) */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1.5">
-            Description <span className="text-gray-400">(optional)</span>
+            {t('createDescription', lang)} <span className="text-gray-400">({t('optional', lang)})</span>
           </label>
           <textarea
             value={form.description}
             onChange={(e) => setForm({ ...form, description: e.target.value })}
             className="input-field"
             rows={2}
-            placeholder="Any details about the food..."
+            placeholder={t('createDescPlaceholder', lang)}
           />
         </div>
 
         {/* Food type (optional) */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1.5">
-            Food Type <span className="text-gray-400">(optional)</span>
+            {t('createFoodType', lang)} <span className="text-gray-400">({t('optional', lang)})</span>
           </label>
           <input
             type="text"
             value={form.food_type}
             onChange={(e) => setForm({ ...form, food_type: e.target.value })}
             className="input-field"
-            placeholder="e.g., Lunch, Dinner, Snacks"
+            placeholder={t('createTypePlaceholder', lang)}
           />
         </div>
 
@@ -197,7 +200,7 @@ export default function CreateListing() {
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             <Clock className="w-4 h-4 inline mr-1" />
-            Available for how long? *
+            {t('createAvailableFor', lang)}
           </label>
           <div className="grid grid-cols-4 gap-2">
             {[1, 2, 4, 6].map((h) => (
@@ -220,14 +223,14 @@ export default function CreateListing() {
         {/* Address */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1.5">
-            Address <span className="text-gray-400">(optional)</span>
+            {t('createAddress', lang)} <span className="text-gray-400">({t('optional', lang)})</span>
           </label>
           <input
             type="text"
             value={form.address}
             onChange={(e) => setForm({ ...form, address: e.target.value })}
             className="input-field"
-            placeholder="e.g., House 5, Street 10, G-11/2"
+            placeholder={t('createAddressPlaceholder', lang)}
           />
         </div>
 
@@ -235,13 +238,13 @@ export default function CreateListing() {
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             <MapPin className="w-4 h-4 inline mr-1" />
-            Pin your location *
+            {t('createPinLocation', lang)}
           </label>
           {gettingLocation ? (
             <div className="h-64 bg-gray-100 rounded-2xl flex items-center justify-center">
               <div className="text-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-4 border-primary-500 border-t-transparent mx-auto mb-2" />
-                <p className="text-sm text-gray-500">Getting your location...</p>
+                <p className="text-sm text-gray-500">{t('createGettingLocation', lang)}</p>
               </div>
             </div>
           ) : (
@@ -249,7 +252,7 @@ export default function CreateListing() {
           )}
           {location && (
             <p className="text-xs text-gray-400 mt-1">
-              📍 {location.lat.toFixed(4)}, {location.lng.toFixed(4)} — Click or drag marker to adjust
+              📍 {location.lat.toFixed(4)}, {location.lng.toFixed(4)} — {t('createClickDrag', lang)}
             </p>
           )}
         </div>
@@ -258,7 +261,7 @@ export default function CreateListing() {
           {loading ? (
             <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
           ) : (
-            '🥗 Publish Food Listing'
+            `🥗 ${t('createPublish', lang)}`
           )}
         </button>
       </form>

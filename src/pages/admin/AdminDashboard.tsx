@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../lib/api';
+import { useLanguage } from '../../context/LanguageContext';
+import { t } from '../../lib/translations';
 import { Users, UtensilsCrossed, ClipboardList, AlertTriangle, TrendingUp, CheckCircle2 } from 'lucide-react';
 import type { AdminStats } from '../../../shared/types';
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const { lang } = useLanguage();
 
   useEffect(() => {
     api.get('/admin/stats')
@@ -23,23 +26,23 @@ export default function AdminDashboard() {
     );
   }
 
-  if (!stats) return <p className="p-8 text-gray-500">Failed to load stats.</p>;
+  if (!stats) return <p className="p-8 text-gray-500">{t('adminFailedLoadStats', lang)}</p>;
 
   const cards = [
-    { label: 'Total Users', value: stats.total_users, icon: Users, color: 'bg-blue-100 text-blue-600', link: '/admin/users' },
-    { label: 'Donors', value: stats.total_donors, icon: UtensilsCrossed, color: 'bg-green-100 text-green-600' },
-    { label: 'Receivers', value: stats.total_receivers, icon: Users, color: 'bg-warmOrange-100 text-warmOrange-600' },
-    { label: 'Total Listings', value: stats.total_listings, icon: ClipboardList, color: 'bg-purple-100 text-purple-600', link: '/admin/listings' },
-    { label: 'Active Listings', value: stats.active_listings, icon: TrendingUp, color: 'bg-emerald-100 text-emerald-600' },
-    { label: 'Total Claims', value: stats.total_claims, icon: ClipboardList, color: 'bg-cyan-100 text-cyan-600' },
-    { label: 'Completed Pickups', value: stats.completed_claims, icon: CheckCircle2, color: 'bg-green-100 text-green-600' },
-    { label: 'Pending Reports', value: stats.pending_reports, icon: AlertTriangle, color: 'bg-red-100 text-red-600', link: '/admin/reports' },
+    { label: t('adminTotalUsers', lang), value: stats.total_users, icon: Users, color: 'bg-blue-100 text-blue-600', link: '/admin/users' },
+    { label: t('adminDonors', lang), value: stats.total_donors, icon: UtensilsCrossed, color: 'bg-green-100 text-green-600' },
+    { label: t('adminReceivers', lang), value: stats.total_receivers, icon: Users, color: 'bg-warmOrange-100 text-warmOrange-600' },
+    { label: t('adminTotalListings', lang), value: stats.total_listings, icon: ClipboardList, color: 'bg-purple-100 text-purple-600', link: '/admin/listings' },
+    { label: t('adminActiveListings', lang), value: stats.active_listings, icon: TrendingUp, color: 'bg-emerald-100 text-emerald-600' },
+    { label: t('adminTotalClaims', lang), value: stats.total_claims, icon: ClipboardList, color: 'bg-cyan-100 text-cyan-600' },
+    { label: t('adminCompletedPickups', lang), value: stats.completed_claims, icon: CheckCircle2, color: 'bg-green-100 text-green-600' },
+    { label: t('adminPendingReports', lang), value: stats.pending_reports, icon: AlertTriangle, color: 'bg-red-100 text-red-600', link: '/admin/reports' },
   ];
 
   return (
     <div className="p-4 md:p-8 max-w-5xl mx-auto">
-      <h1 className="text-2xl font-bold text-gray-900 mb-2">Admin Dashboard 🛡️</h1>
-      <p className="text-gray-500 mb-8">Overview of FoodShare platform</p>
+      <h1 className="text-2xl font-bold text-gray-900 mb-2">{t('adminDashboard', lang)} 🛡️</h1>
+      <p className="text-gray-500 mb-8">{t('adminOverview', lang)}</p>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {cards.map((card) => {
@@ -62,8 +65,8 @@ export default function AdminDashboard() {
             <Users className="w-6 h-6 text-blue-600" />
           </div>
           <div>
-            <h3 className="font-bold text-gray-900">Manage Users</h3>
-            <p className="text-sm text-gray-500">Verify, block, or review users</p>
+            <h3 className="font-bold text-gray-900">{t('adminManageUsers', lang)}</h3>
+            <p className="text-sm text-gray-500">{t('adminVerifyBlockReview', lang)}</p>
           </div>
         </Link>
         <Link to="/admin/reports" className="card hover:shadow-md transition-shadow flex items-center gap-4">
@@ -71,8 +74,8 @@ export default function AdminDashboard() {
             <AlertTriangle className="w-6 h-6 text-red-600" />
           </div>
           <div>
-            <h3 className="font-bold text-gray-900">Handle Reports</h3>
-            <p className="text-sm text-gray-500">{stats.pending_reports} pending reports</p>
+            <h3 className="font-bold text-gray-900">{t('adminHandleReports', lang)}</h3>
+            <p className="text-sm text-gray-500">{t('adminPendingReportsCount', lang, { count: stats.pending_reports })}</p>
           </div>
         </Link>
       </div>
