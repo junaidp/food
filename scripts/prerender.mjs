@@ -12,9 +12,7 @@ const { render, renderShellHead, PUBLIC_ROUTES, buildSitemap, buildRobots, SITE_
   pathToFileURL(ssrEntry).href
 );
 
-if (SITE_URL.includes('example.com')) {
-  console.warn(`⚠️  VITE_SITE_URL is not set — canonical URLs and the sitemap use the placeholder ${SITE_URL}`);
-}
+console.log(`Pre-rendering for ${SITE_URL}`);
 
 const template = fs.readFileSync(path.join(clientDir, 'index.html'), 'utf8');
 const SEO_BLOCK = /<!--seo:start-->[\s\S]*?<!--seo:end-->/;

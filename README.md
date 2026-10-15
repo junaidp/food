@@ -100,8 +100,8 @@ Public pages (home, how it works, FAQ, about, food safety, for businesses, blog)
 pre-rendered to static HTML at build time (`scripts/prerender.mjs`), in English (`/faq`)
 and Urdu (`/ur/faq`). The build also writes `sitemap.xml` and `robots.txt`.
 
-- Set `VITE_SITE_URL` (e.g. `https://your-domain.com`) in the build environment — it is
-  used for canonical URLs, the sitemap and social previews.
+- The site URL (`https://itaam.world`) is used for canonical URLs, the sitemap and social
+  previews. Set `VITE_SITE_URL` in the build environment only to override it (e.g. staging).
 - Page copy lives in `src/content/publicContent.ts`; titles and meta tags in `src/lib/seo.ts`.
 - **Add a blog post:** create a file in `src/content/blog/` (copy an existing post), add it
   to `BLOG_POSTS` in `src/content/blog/index.ts`, and rebuild. Links inside text use

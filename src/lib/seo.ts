@@ -3,8 +3,8 @@ import { t } from './translations';
 import { pageText, faqItems, type PublicPage } from '../content/publicContent';
 import { BLOG_POSTS, blogPostPath, postsFor, type BlogPost } from '../content/blog';
 
-// Set VITE_SITE_URL to the production origin (no trailing slash) before building.
-export const SITE_URL = (import.meta.env.VITE_SITE_URL || 'https://foodshare.example.com').replace(/\/+$/, '');
+// Production origin. VITE_SITE_URL overrides it (e.g. for a staging build).
+export const SITE_URL = (import.meta.env.VITE_SITE_URL || 'https://itaam.world').replace(/\/+$/, '');
 export const SITE_NAME = 'FoodShare';
 export const OG_IMAGE = { path: '/og-image.png', width: 1200, height: 630 };
 
