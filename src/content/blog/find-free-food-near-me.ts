@@ -18,7 +18,7 @@ const post: BlogPost = {
     {
       heading: '1. Neighbours sharing home-cooked food',
       paragraphs: [
-        'The closest source of free food is usually the homes around you. Apps like [FoodShare](/) let people post a plate or two of spare home-cooked food, pin a pickup spot on a map, and hand it to someone nearby. You open the map, see what is available, request a serving and pick it up with a code.',
+        'The closest source of free food is usually the homes around you. Apps like [Itaam](/) let people post a plate or two of spare home-cooked food, pin a pickup spot on a map, and hand it to someone nearby. You open the map, see what is available, request a serving and pick it up with a code.',
         'Because the food comes from a few streets away, it is fresh, it is often a proper home-cooked meal, and pickup takes minutes rather than an hour on a bus.',
       ],
     },
@@ -43,7 +43,7 @@ const post: BlogPost = {
     {
       heading: 'How to pick up food with confidence',
       paragraphs: [
-        'Many people feel shy about asking for free food. There is no need to. People who share food do it because they want it eaten, not thrown away. On FoodShare, nobody asks why you are requesting food, and the pickup is confirmed with a private code.',
+        'Many people feel shy about asking for free food. There is no need to. People who share food do it because they want it eaten, not thrown away. On Itaam, nobody asks why you are requesting food, and the pickup is confirmed with a private code.',
       ],
       list: [
         'Only request what you will eat, so there is enough for others.',
@@ -61,7 +61,7 @@ const post: BlogPost = {
     {
       heading: 'Start looking',
       paragraphs: [
-        '[Create a free FoodShare account](/register?role=receiver), allow location access and open the map to see food being shared around you. New to it? Read [how FoodShare works](/how-it-works) first.',
+        '[Create a free Itaam account](/register?role=receiver), allow location access and open the map to see food being shared around you. New to it? Read [how Itaam works](/how-it-works) first.',
       ],
     },
   ],

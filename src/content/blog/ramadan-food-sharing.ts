@@ -30,7 +30,7 @@ const post: BlogPost = {
     {
       heading: 'Share leftovers the same evening',
       paragraphs: [
-        'If there is still food after iftar, post it straight away. On [FoodShare](/) you can share a plate with someone nearby in under a minute. People in your area see it on the map and can pick it up the same evening, often just in time for sehri.',
+        'If there is still food after iftar, post it straight away. On [Itaam](/) you can share a plate with someone nearby in under a minute. People in your area see it on the map and can pick it up the same evening, often just in time for sehri.',
       ],
     },
     {
@@ -52,7 +52,7 @@ const post: BlogPost = {
     {
       heading: 'A month of sharing',
       paragraphs: [
-        'Sharing food with dignity, with no questions asked, fits the spirit of Ramadan perfectly. [Join FoodShare](/register?role=donor) and make this Ramadan a month where nothing goes to waste.',
+        'Sharing food with dignity, with no questions asked, fits the spirit of Ramadan perfectly. [Join Itaam](/register?role=donor) and make this Ramadan a month where nothing goes to waste.',
       ],
     },
   ],

@@ -42,8 +42,8 @@ const post: BlogPost = {
     {
       heading: 'Share it nearby',
       paragraphs: [
-        'With a lot of food, the challenge is reaching enough people quickly. On [FoodShare](/) you can post the food with the number of servings available. People nearby see it on the map, request servings and pick them up with a code. Servings left update automatically, so you always know how much is left.',
-        'Restaurants, caterers and venues can share surplus regularly. See [FoodShare for businesses](/for-businesses).',
+        'With a lot of food, the challenge is reaching enough people quickly. On [Itaam](/) you can post the food with the number of servings available. People nearby see it on the map, request servings and pick them up with a code. Servings left update automatically, so you always know how much is left.',
+        'Restaurants, caterers and venues can share surplus regularly. See [Itaam for businesses](/for-businesses).',
       ],
     },
     {

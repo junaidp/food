@@ -49,7 +49,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-2xl">{roleIcon}</span>
-            <h1 className="text-lg font-bold text-gray-900">FoodShare</h1>
+            <h1 className="text-lg font-bold text-gray-900">Itaam</h1>
           </div>
           <div className="flex items-center gap-2">
             <LanguageSelector />

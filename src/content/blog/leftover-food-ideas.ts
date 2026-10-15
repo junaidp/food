@@ -30,7 +30,7 @@ const post: BlogPost = {
     {
       heading: '3. Share it with a neighbour',
       paragraphs: [
-        'If you will not eat it in the next day, someone nearby probably would. On [FoodShare](/) you can post a plate in under a minute: say what it is, how many it serves and when it can be picked up. Someone close by requests it and collects it with a code. One plate shared is one plate not wasted. See [how sharing works](/how-it-works).',
+        'If you will not eat it in the next day, someone nearby probably would. On [Itaam](/) you can post a plate in under a minute: say what it is, how many it serves and when it can be picked up. Someone close by requests it and collects it with a code. One plate shared is one plate not wasted. See [how sharing works](/how-it-works).',
       ],
     },
     {

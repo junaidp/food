@@ -2,8 +2,8 @@ export type Language = 'en' | 'ur';
 
 const en: Record<string, string> = {
   // Common
-  appName: 'FoodShare',
-  loading: 'Loading FoodShare...',
+  appName: 'Itaam',
+  loading: 'Loading Itaam...',
   back: 'Back',
   save: 'Save',
   cancel: 'Cancel',
@@ -100,12 +100,12 @@ const en: Record<string, string> = {
 
   // Landing
   landingHeroTitle: 'Share free home-cooked food with your neighbours',
-  landingConnect: 'Cooked a little extra? Put a plate on FoodShare. Anyone nearby can see it on the map, request it and pick it up, for free. Less food wasted, more neighbours fed.',
+  landingConnect: 'Cooked a little extra? Put a plate on Itaam. Anyone nearby can see it on the map, request it and pick it up, for free. Less food wasted, more neighbours fed.',
   landingLearnHow: 'See how it works',
   landingLogin: 'Login',
   landingSignUp: 'Sign Up',
   landingFree: 'Always free',
-  landingFreeDesc: 'No fees, no payments. Food on FoodShare is shared, never sold.',
+  landingFreeDesc: 'No fees, no payments. Food on Itaam is shared, never sold.',
   landingShareDignity: 'Share with Dignity',
   landingShareDignityDesc: 'Pick up food privately with a unique code. No questions asked.',
   landingLiveMap: 'Free food near you',
@@ -135,7 +135,7 @@ const en: Record<string, string> = {
 
   // Login
   loginWelcomeBack: 'Welcome Back',
-  loginSignInTo: 'Sign in to FoodShare',
+  loginSignInTo: 'Sign in to Itaam',
   loginPhoneNumber: 'Phone Number',
   loginPassword: 'Password',
   loginSignIn: 'Sign In',
@@ -144,7 +144,7 @@ const en: Record<string, string> = {
   loginFailed: 'Login failed',
 
   // Register
-  registerJoin: 'Join FoodShare',
+  registerJoin: 'Join Itaam',
   registerCreateAccount: 'Create your account',
   registerImDonor: "I'm a Donor",
   registerShareFood: 'Share food',
@@ -311,7 +311,7 @@ const en: Record<string, string> = {
 
   // Admin
   adminDashboard: 'Admin Dashboard',
-  adminOverview: 'Overview of FoodShare platform',
+  adminOverview: 'Overview of Itaam platform',
   adminTotalUsers: 'Total Users',
   adminDonors: 'Donors',
   adminReceivers: 'Receivers',
@@ -356,7 +356,7 @@ const en: Record<string, string> = {
   adminFailedDelete: 'Failed to delete.',
 
   // Install Prompt
-  installTitle: 'Install FoodShare',
+  installTitle: 'Install Itaam',
   installDesc: 'Install our app for quick access and offline support!',
   installBtn: 'Install',
   installNotNow: 'Not now',
@@ -393,8 +393,8 @@ const en: Record<string, string> = {
 
 const ur: Record<string, string> = {
   // Common
-  appName: 'FoodShare',
-  loading: 'FoodShare لوڈ ہو رہا ہے...',
+  appName: 'Itaam',
+  loading: 'Itaam لوڈ ہو رہا ہے...',
   back: 'واپس',
   save: 'محفوظ کریں',
   cancel: 'منسوخ کریں',
@@ -491,12 +491,12 @@ const ur: Record<string, string> = {
 
   // Landing
   landingHeroTitle: 'گھر کا بنا کھانا اپنے پڑوسیوں کے ساتھ مفت بانٹیں',
-  landingConnect: 'کھانا تھوڑا زیادہ بن گیا؟ ایک پلیٹ فوڈ شیئر پر رکھیں۔ آس پاس کوئی بھی اسے نقشے پر دیکھ کر درخواست کر سکتا ہے اور مفت لے جا سکتا ہے۔ کم ضیاع، زیادہ پڑوسی سیر۔',
+  landingConnect: 'کھانا تھوڑا زیادہ بن گیا؟ ایک پلیٹ اطعام پر رکھیں۔ آس پاس کوئی بھی اسے نقشے پر دیکھ کر درخواست کر سکتا ہے اور مفت لے جا سکتا ہے۔ کم ضیاع، زیادہ پڑوسی سیر۔',
   landingLearnHow: 'دیکھیں یہ کیسے کام کرتا ہے',
   landingLogin: 'لاگ ان',
   landingSignUp: 'سائن اپ',
   landingFree: 'ہمیشہ مفت',
-  landingFreeDesc: 'کوئی فیس یا ادائیگی نہیں۔ فوڈ شیئر پر کھانا بانٹا جاتا ہے، بیچا نہیں جاتا۔',
+  landingFreeDesc: 'کوئی فیس یا ادائیگی نہیں۔ اطعام پر کھانا بانٹا جاتا ہے، بیچا نہیں جاتا۔',
   landingShareDignity: 'عزت کے ساتھ بانٹیں',
   landingShareDignityDesc: 'ایک منفرد کوڈ کے ساتھ نجی طور پر کھانا وصول کریں۔ کوئی سوال نہیں۔',
   landingLiveMap: 'آپ کے قریب مفت کھانا',
@@ -526,7 +526,7 @@ const ur: Record<string, string> = {
 
   // Login
   loginWelcomeBack: 'خوش آمدید',
-  loginSignInTo: 'FoodShare میں سائن ان کریں',
+  loginSignInTo: 'Itaam میں سائن ان کریں',
   loginPhoneNumber: 'فون نمبر',
   loginPassword: 'پاس ورڈ',
   loginSignIn: 'سائن ان',
@@ -535,7 +535,7 @@ const ur: Record<string, string> = {
   loginFailed: 'لاگ ان ناکام',
 
   // Register
-  registerJoin: 'FoodShare میں شامل ہوں',
+  registerJoin: 'Itaam میں شامل ہوں',
   registerCreateAccount: 'اپنا اکاؤنٹ بنائیں',
   registerImDonor: 'میں عطیہ دہندہ ہوں',
   registerShareFood: 'کھانا بانٹیں',
@@ -702,7 +702,7 @@ const ur: Record<string, string> = {
 
   // Admin
   adminDashboard: 'منتظم کا ڈیش بورڈ',
-  adminOverview: 'FoodShare پلیٹ فارم کا جائزہ',
+  adminOverview: 'Itaam پلیٹ فارم کا جائزہ',
   adminTotalUsers: 'کل صارفین',
   adminDonors: 'عطیہ دہندہ',
   adminReceivers: 'وصول کنندگان',
@@ -747,7 +747,7 @@ const ur: Record<string, string> = {
   adminFailedDelete: 'حذف کرنا ناکام۔',
 
   // Install Prompt
-  installTitle: 'FoodShare انسٹال کریں',
+  installTitle: 'Itaam انسٹال کریں',
   installDesc: 'فوری رسائی اور آف لائن سپورٹ کے لیے ہماری ایپ انسٹال کریں!',
   installBtn: 'انسٹال',
   installNotNow: 'ابھی نہیں',

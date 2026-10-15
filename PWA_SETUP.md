@@ -1,6 +1,6 @@
 # PWA Setup Complete! 🎉
 
-Your FoodShare app is now a Progressive Web App (PWA)!
+Your Itaam app is now a Progressive Web App (PWA)!
 
 ## What's Been Added
 

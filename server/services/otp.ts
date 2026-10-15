@@ -68,7 +68,7 @@ async function storeOTP(phone: string, otp: string): Promise<void> {
 // ── Send via Mocean SMS API ─────────────────────────────────
 async function sendViaMocean(phone: string, otp: string): Promise<boolean> {
   const to = formatPhoneNumber(phone);
-  const text = `Your FoodShare verification code is: ${otp}. Valid for 10 minutes.`;
+  const text = `Your Itaam verification code is: ${otp}. Valid for 10 minutes.`;
 
   try {
     const params = new URLSearchParams({
@@ -99,7 +99,7 @@ async function sendViaMocean(phone: string, otp: string): Promise<boolean> {
 // ── Send via Messente Omnichannel API ────────────────────────
 async function sendViaMessente(phone: string, otp: string): Promise<boolean> {
   const to = formatPhoneNumber(phone);
-  const text = `Your FoodShare verification code is: ${otp}. Valid for 10 minutes.`;
+  const text = `Your Itaam verification code is: ${otp}. Valid for 10 minutes.`;
 
   try {
     const response = await axios.post(

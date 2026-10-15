@@ -1,4 +1,4 @@
-# FoodShare 🍽️ — Share Food, Share Love
+# Itaam 🍽️ — Share Food, Share Love
 
 A charity food sharing app connecting donors with receivers in Islamabad. Donors share excess food, receivers find and claim it with dignity using unique pickup codes.
 
@@ -117,7 +117,7 @@ and Urdu (`/ur/faq`). The build also writes `sitemap.xml` and `robots.txt`.
 
 ## PWA Installation
 
-Once deployed, users can install FoodShare as a mobile app:
+Once deployed, users can install Itaam as a mobile app:
 
 **Android (Chrome):**
 1. Visit the website

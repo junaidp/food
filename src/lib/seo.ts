@@ -5,7 +5,8 @@ import { BLOG_POSTS, blogPostPath, postsFor, type BlogPost } from '../content/bl
 
 // Production origin. VITE_SITE_URL overrides it (e.g. for a staging build).
 export const SITE_URL = (import.meta.env.VITE_SITE_URL || 'https://itaam.world').replace(/\/+$/, '');
-export const SITE_NAME = 'FoodShare';
+export const SITE_NAME = 'Itaam';
+export const SITE_NAME_UR = 'اطعام';
 export const OG_IMAGE = { path: '/og-image.png', width: 1200, height: 630 };
 
 export const LANGUAGES: Language[] = ['en', 'ur'];
@@ -105,7 +106,7 @@ function structuredData(route: PublicRoute) {
         author: { '@id': ORG_ID },
         publisher: { '@id': ORG_ID },
       },
-      { '@type': 'Organization', '@id': ORG_ID, name: SITE_NAME, url: absolute('/'), logo: absolute('/pwa-512x512.png') }
+      { '@type': 'Organization', '@id': ORG_ID, name: SITE_NAME, alternateName: SITE_NAME_UR, url: absolute('/'), logo: absolute('/pwa-512x512.png') }
     );
     return { '@context': 'https://schema.org', '@graph': graph };
   }
@@ -118,6 +119,7 @@ function structuredData(route: PublicRoute) {
         '@type': 'Organization',
         '@id': ORG_ID,
         name: SITE_NAME,
+        alternateName: SITE_NAME_UR,
         url: absolute('/'),
         logo: absolute('/pwa-512x512.png'),
         description: pageText.about.en.description,

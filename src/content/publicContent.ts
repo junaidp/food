@@ -33,27 +33,27 @@ export const pageText: Record<PublicPage, Record<Language, PageText>> = {
   home: {
     en: {
       navLabel: 'Home',
-      title: 'FoodShare – Share Free Home-Cooked Food With Your Neighbours',
+      title: 'Itaam – Share Free Home-Cooked Food With Your Neighbours',
       description:
-        'Cooked too much? Share a plate with someone nearby for free. FoodShare shows free home-cooked food near you on a map. Request it, pick it up with a code, waste less.',
+        'Cooked too much? Share a plate with someone nearby for free. Itaam shows free home-cooked food near you on a map. Request it, pick it up with a code, waste less.',
     },
     ur: {
       navLabel: 'ہوم',
-      title: 'فوڈ شیئر – اپنے پڑوسیوں کے ساتھ گھر کا بنا کھانا مفت بانٹیں',
+      title: 'اطعام – اپنے پڑوسیوں کے ساتھ گھر کا بنا کھانا مفت بانٹیں',
       description:
-        'کھانا زیادہ بن گیا؟ ایک پلیٹ کسی قریبی شخص کے ساتھ مفت بانٹیں۔ فوڈ شیئر نقشے پر آپ کے قریب مفت کھانا دکھاتا ہے۔ درخواست کریں، کوڈ کے ساتھ وصول کریں، ضیاع کم کریں۔',
+        'کھانا زیادہ بن گیا؟ ایک پلیٹ کسی قریبی شخص کے ساتھ مفت بانٹیں۔ اطعام نقشے پر آپ کے قریب مفت کھانا دکھاتا ہے۔ درخواست کریں، کوڈ کے ساتھ وصول کریں، ضیاع کم کریں۔',
     },
   },
   howItWorks: {
     en: {
       navLabel: 'How it works',
-      title: 'How FoodShare Works – Share or Pick Up Free Food Near You',
+      title: 'How Itaam Works – Share or Pick Up Free Food Near You',
       description:
-        'Post spare food in a minute, or find free food near you on a live map. See every step of sharing and picking up food on FoodShare, from posting to the 6-digit pickup code.',
+        'Post spare food in a minute, or find free food near you on a live map. See every step of sharing and picking up food on Itaam, from posting to the 6-digit pickup code.',
     },
     ur: {
       navLabel: 'یہ کیسے کام کرتا ہے',
-      title: 'فوڈ شیئر کیسے کام کرتا ہے – اپنے قریب مفت کھانا بانٹیں یا حاصل کریں',
+      title: 'اطعام کیسے کام کرتا ہے – اپنے قریب مفت کھانا بانٹیں یا حاصل کریں',
       description:
         'ایک منٹ میں اضافی کھانا پوسٹ کریں، یا لائیو نقشے پر اپنے قریب مفت کھانا تلاش کریں۔ پوسٹ کرنے سے لے کر 6 ہندسوں کے پک اپ کوڈ تک ہر مرحلہ دیکھیں۔',
     },
@@ -61,41 +61,41 @@ export const pageText: Record<PublicPage, Record<Language, PageText>> = {
   faq: {
     en: {
       navLabel: 'FAQ',
-      title: 'FoodShare FAQ – Free Food Sharing Questions Answered',
+      title: 'Itaam FAQ – Free Food Sharing Questions Answered',
       description:
-        'Is FoodShare really free? Who can share or pick up food? How do pickup codes work, and is it safe? Answers to the most common questions about sharing food with people nearby.',
+        'Is Itaam really free? Who can share or pick up food? How do pickup codes work, and is it safe? Answers to the most common questions about sharing food with people nearby.',
     },
     ur: {
       navLabel: 'عام سوالات',
-      title: 'فوڈ شیئر – عام سوالات اور جوابات',
+      title: 'اطعام – عام سوالات اور جوابات',
       description:
-        'کیا فوڈ شیئر واقعی مفت ہے؟ کون کھانا بانٹ یا لے سکتا ہے؟ پک اپ کوڈ کیسے کام کرتا ہے اور کیا یہ محفوظ ہے؟ قریبی لوگوں کے ساتھ کھانا بانٹنے کے بارے میں عام سوالات کے جواب۔',
+        'کیا اطعام واقعی مفت ہے؟ کون کھانا بانٹ یا لے سکتا ہے؟ پک اپ کوڈ کیسے کام کرتا ہے اور کیا یہ محفوظ ہے؟ قریبی لوگوں کے ساتھ کھانا بانٹنے کے بارے میں عام سوالات کے جواب۔',
     },
   },
   about: {
     en: {
       navLabel: 'About',
-      title: 'About FoodShare – Neighbours Sharing Food, Reducing Food Waste',
+      title: 'About Itaam – Neighbours Sharing Food, Reducing Food Waste',
       description:
-        'FoodShare is a free community app where anyone can share spare home-cooked food with people nearby. Our mission: less food in the bin, more people fed, with dignity.',
+        'Itaam is a free community app where anyone can share spare home-cooked food with people nearby. Our mission: less food in the bin, more people fed, with dignity.',
     },
     ur: {
       navLabel: 'ہمارے بارے میں',
-      title: 'فوڈ شیئر کے بارے میں – پڑوسی کھانا بانٹیں، ضیاع کم کریں',
+      title: 'اطعام کے بارے میں – پڑوسی کھانا بانٹیں، ضیاع کم کریں',
       description:
-        'فوڈ شیئر ایک مفت کمیونٹی ایپ ہے جہاں کوئی بھی اپنا اضافی گھر کا کھانا قریبی لوگوں کے ساتھ بانٹ سکتا ہے۔ ہمارا مقصد: کم کھانا ضائع ہو، زیادہ لوگ عزت سے کھائیں۔',
+        'اطعام ایک مفت کمیونٹی ایپ ہے جہاں کوئی بھی اپنا اضافی گھر کا کھانا قریبی لوگوں کے ساتھ بانٹ سکتا ہے۔ ہمارا مقصد: کم کھانا ضائع ہو، زیادہ لوگ عزت سے کھائیں۔',
     },
   },
   foodSafety: {
     en: {
       navLabel: 'Food safety',
-      title: 'Food Safety Tips for Sharing Home-Cooked Food | FoodShare',
+      title: 'Food Safety Tips for Sharing Home-Cooked Food | Itaam',
       description:
         'How to share and pick up food safely: what to share, how to pack and label it, how long cooked food keeps, allergy notes and safe pickups. Simple tips for everyone.',
     },
     ur: {
       navLabel: 'کھانے کی حفاظت',
-      title: 'گھر کا کھانا محفوظ طریقے سے بانٹنے کی تجاویز | فوڈ شیئر',
+      title: 'گھر کا کھانا محفوظ طریقے سے بانٹنے کی تجاویز | اطعام',
       description:
         'کھانا محفوظ طریقے سے کیسے بانٹیں اور وصول کریں: کیا بانٹیں، کیسے پیک اور لیبل کریں، پکا ہوا کھانا کب تک ٹھیک رہتا ہے، الرجی اور محفوظ پک اپ کی آسان تجاویز۔',
     },
@@ -103,13 +103,13 @@ export const pageText: Record<PublicPage, Record<Language, PageText>> = {
   forBusinesses: {
     en: {
       navLabel: 'For businesses',
-      title: 'Share Surplus Food From Your Restaurant, Café or Event | FoodShare',
+      title: 'Share Surplus Food From Your Restaurant, Café or Event | Itaam',
       description:
         'Restaurants, bakeries, caterers and event venues: give surplus food to people nearby for free instead of throwing it away. Post in a minute, hand over with a pickup code.',
     },
     ur: {
       navLabel: 'کاروبار کے لیے',
-      title: 'اپنے ریسٹورنٹ، بیکری یا تقریب کا اضافی کھانا بانٹیں | فوڈ شیئر',
+      title: 'اپنے ریسٹورنٹ، بیکری یا تقریب کا اضافی کھانا بانٹیں | اطعام',
       description:
         'ریسٹورنٹ، بیکری، کیٹرر اور شادی ہال: اضافی کھانا پھینکنے کے بجائے قریبی لوگوں کو مفت دیں۔ ایک منٹ میں پوسٹ کریں اور پک اپ کوڈ کے ساتھ حوالے کریں۔',
     },
@@ -117,13 +117,13 @@ export const pageText: Record<PublicPage, Record<Language, PageText>> = {
   blog: {
     en: {
       navLabel: 'Blog',
-      title: 'FoodShare Blog – Food Sharing, Leftovers and Reducing Food Waste',
+      title: 'Itaam Blog – Food Sharing, Leftovers and Reducing Food Waste',
       description:
-        'Guides and ideas on sharing food with neighbours, finding free food near you, using leftovers and reducing food waste at home, from the FoodShare team.',
+        'Guides and ideas on sharing food with neighbours, finding free food near you, using leftovers and reducing food waste at home, from the Itaam team.',
     },
     ur: {
       navLabel: 'بلاگ',
-      title: 'فوڈ شیئر بلاگ – کھانا بانٹنا، بچا ہوا کھانا اور ضیاع میں کمی',
+      title: 'اطعام بلاگ – کھانا بانٹنا، بچا ہوا کھانا اور ضیاع میں کمی',
       description:
         'پڑوسیوں کے ساتھ کھانا بانٹنے، اپنے قریب مفت کھانا تلاش کرنے، بچے ہوئے کھانے کے استعمال اور ضیاع کم کرنے کے بارے میں رہنمائی اور خیالات۔',
     },
@@ -132,9 +132,9 @@ export const pageText: Record<PublicPage, Record<Language, PageText>> = {
 
 export const howItWorksContent: Record<Language, ContentPageText> = {
   en: {
-    h1: 'How FoodShare works',
+    h1: 'How Itaam works',
     intro:
-      'FoodShare connects people who have a little extra food with people nearby who would like it. There are no fees and no payments — just neighbours sharing food. Here is how it works on each side.',
+      'Itaam connects people who have a little extra food with people nearby who would like it. There are no fees and no payments — just neighbours sharing food. Here is how it works on each side.',
     sections: [
       {
         heading: 'Sharing food',
@@ -186,9 +186,9 @@ export const howItWorksContent: Record<Language, ContentPageText> = {
     ],
   },
   ur: {
-    h1: 'فوڈ شیئر کیسے کام کرتا ہے',
+    h1: 'اطعام کیسے کام کرتا ہے',
     intro:
-      'فوڈ شیئر ان لوگوں کو جن کے پاس تھوڑا اضافی کھانا ہو، ان قریبی لوگوں سے جوڑتا ہے جو اسے لینا چاہیں۔ کوئی فیس یا ادائیگی نہیں — بس پڑوسی آپس میں کھانا بانٹتے ہیں۔ دونوں طرف سے یہ ایسے کام کرتا ہے۔',
+      'اطعام ان لوگوں کو جن کے پاس تھوڑا اضافی کھانا ہو، ان قریبی لوگوں سے جوڑتا ہے جو اسے لینا چاہیں۔ کوئی فیس یا ادائیگی نہیں — بس پڑوسی آپس میں کھانا بانٹتے ہیں۔ دونوں طرف سے یہ ایسے کام کرتا ہے۔',
     sections: [
       {
         heading: 'کھانا بانٹنا',
@@ -243,14 +243,14 @@ export const howItWorksContent: Record<Language, ContentPageText> = {
 
 export const aboutContent: Record<Language, ContentPageText> = {
   en: {
-    h1: 'About FoodShare',
+    h1: 'About Itaam',
     intro:
-      'Every day, good food is thrown away while someone a few streets away would have been glad to eat it. FoodShare exists to close that gap, one plate at a time.',
+      'Every day, good food is thrown away while someone a few streets away would have been glad to eat it. Itaam exists to close that gap, one plate at a time. Our name comes from the Arabic and Urdu word اطعام (itaam), which means feeding others.',
     sections: [
       {
         heading: 'The idea',
         paragraphs: [
-          'If you cook pasta tonight and one plate is left over, you should not have to throw it away. Put it in a box, post it on FoodShare, and someone around you can come and pick it up. That is the whole idea — simple, local and free.',
+          'If you cook pasta tonight and one plate is left over, you should not have to throw it away. Put it in a box, post it on Itaam, and someone around you can come and pick it up. That is the whole idea — simple, local and free.',
           'Anyone can share and anyone can pick up. No money changes hands and nobody is asked why they want the food.',
         ],
       },
@@ -264,7 +264,7 @@ export const aboutContent: Record<Language, ContentPageText> = {
       {
         heading: 'What we believe',
         items: [
-          { title: 'Always free', text: 'Food on FoodShare is shared, never sold.' },
+          { title: 'Always free', text: 'Food on Itaam is shared, never sold.' },
           { title: 'Dignity first', text: 'Pickups use a private code. No questions, no explanations.' },
           { title: 'Local by design', text: 'The map shows food close to you, so sharing takes minutes, not hours.' },
           { title: 'Safe for everyone', text: 'Pickup codes, ratings, reporting and review keep the community trustworthy.' },
@@ -273,14 +273,14 @@ export const aboutContent: Record<Language, ContentPageText> = {
     ],
   },
   ur: {
-    h1: 'فوڈ شیئر کے بارے میں',
+    h1: 'اطعام کے بارے میں',
     intro:
-      'ہر روز اچھا کھانا پھینک دیا جاتا ہے جبکہ چند گلیاں دور کوئی اسے خوشی سے کھا لیتا۔ فوڈ شیئر اسی فاصلے کو ختم کرنے کے لیے ہے، ایک وقت میں ایک پلیٹ۔',
+      'ہر روز اچھا کھانا پھینک دیا جاتا ہے جبکہ چند گلیاں دور کوئی اسے خوشی سے کھا لیتا۔ اطعام اسی فاصلے کو ختم کرنے کے لیے ہے، ایک وقت میں ایک پلیٹ۔ اطعام کا مطلب ہے دوسروں کو کھانا کھلانا۔',
     sections: [
       {
         heading: 'خیال',
         paragraphs: [
-          'اگر آج آپ نے پاستا بنایا اور ایک پلیٹ بچ گئی تو اسے پھینکنے کی ضرورت نہیں۔ اسے ڈبے میں رکھیں، فوڈ شیئر پر پوسٹ کریں، اور آپ کے آس پاس کوئی آ کر لے جائے۔ بس یہی خیال ہے — آسان، مقامی اور مفت۔',
+          'اگر آج آپ نے پاستا بنایا اور ایک پلیٹ بچ گئی تو اسے پھینکنے کی ضرورت نہیں۔ اسے ڈبے میں رکھیں، اطعام پر پوسٹ کریں، اور آپ کے آس پاس کوئی آ کر لے جائے۔ بس یہی خیال ہے — آسان، مقامی اور مفت۔',
           'کوئی بھی بانٹ سکتا ہے اور کوئی بھی لے سکتا ہے۔ کوئی پیسہ نہیں لیا جاتا اور کسی سے نہیں پوچھا جاتا کہ اسے کھانا کیوں چاہیے۔',
         ],
       },
@@ -294,7 +294,7 @@ export const aboutContent: Record<Language, ContentPageText> = {
       {
         heading: 'ہمارے اصول',
         items: [
-          { title: 'ہمیشہ مفت', text: 'فوڈ شیئر پر کھانا بانٹا جاتا ہے، بیچا نہیں جاتا۔' },
+          { title: 'ہمیشہ مفت', text: 'اطعام پر کھانا بانٹا جاتا ہے، بیچا نہیں جاتا۔' },
           { title: 'عزت سب سے پہلے', text: 'وصولی ایک نجی کوڈ سے ہوتی ہے۔ نہ سوال، نہ وضاحت۔' },
           { title: 'مقامی', text: 'نقشہ آپ کے قریب کھانا دکھاتا ہے، اس لیے بانٹنے میں گھنٹے نہیں، منٹ لگتے ہیں۔' },
           { title: 'سب کے لیے محفوظ', text: 'پک اپ کوڈ، درجہ بندی، رپورٹنگ اور جائزہ کمیونٹی کو قابل اعتماد رکھتے ہیں۔' },
@@ -423,14 +423,14 @@ export const forBusinessesContent: Record<Language, ContentPageText> = {
   en: {
     h1: 'Share surplus food from your restaurant, café or event',
     intro:
-      'Restaurants, bakeries, caterers, hotels and event venues end most days with good food that will not be sold. FoodShare lets you give it to people nearby for free in a minute, instead of putting it in the bin.',
+      'Restaurants, bakeries, caterers, hotels and event venues end most days with good food that will not be sold. Itaam lets you give it to people nearby for free in a minute, instead of putting it in the bin.',
     sections: [
       {
         heading: 'Why share your surplus',
         items: [
           { title: 'Less waste', text: 'Unsold food is eaten instead of thrown away, which also means fewer bags in your bins.' },
           { title: 'Good for your community', text: 'Your neighbours eat well and remember who shared with them.' },
-          { title: 'No cost, no paperwork', text: 'FoodShare is free. There are no fees, contracts or collection schedules.' },
+          { title: 'No cost, no paperwork', text: 'Itaam is free. There are no fees, contracts or collection schedules.' },
           { title: 'You stay in control', text: 'Share when you have surplus, accept the requests you want and stop at any time.' },
         ],
       },
@@ -467,14 +467,14 @@ export const forBusinessesContent: Record<Language, ContentPageText> = {
   ur: {
     h1: 'اپنے ریسٹورنٹ، بیکری یا تقریب کا اضافی کھانا بانٹیں',
     intro:
-      'ریسٹورنٹ، بیکری، کیٹرر، ہوٹل اور شادی ہال اکثر دن کے آخر میں ایسا اچھا کھانا رکھتے ہیں جو بکے گا نہیں۔ فوڈ شیئر کے ذریعے آپ اسے کوڑے میں ڈالنے کے بجائے ایک منٹ میں قریبی لوگوں کو مفت دے سکتے ہیں۔',
+      'ریسٹورنٹ، بیکری، کیٹرر، ہوٹل اور شادی ہال اکثر دن کے آخر میں ایسا اچھا کھانا رکھتے ہیں جو بکے گا نہیں۔ اطعام کے ذریعے آپ اسے کوڑے میں ڈالنے کے بجائے ایک منٹ میں قریبی لوگوں کو مفت دے سکتے ہیں۔',
     sections: [
       {
         heading: 'اضافی کھانا کیوں بانٹیں',
         items: [
           { title: 'کم ضیاع', text: 'نہ بکنے والا کھانا پھینکنے کے بجائے کھایا جاتا ہے۔' },
           { title: 'کمیونٹی کے لیے اچھا', text: 'آپ کے پڑوسی اچھا کھاتے ہیں اور یاد رکھتے ہیں کہ کس نے بانٹا۔' },
-          { title: 'کوئی خرچ یا کاغذی کارروائی نہیں', text: 'فوڈ شیئر مفت ہے۔ نہ فیس، نہ معاہدہ، نہ وصولی کا شیڈول۔' },
+          { title: 'کوئی خرچ یا کاغذی کارروائی نہیں', text: 'اطعام مفت ہے۔ نہ فیس، نہ معاہدہ، نہ وصولی کا شیڈول۔' },
           { title: 'اختیار آپ کے پاس', text: 'جب اضافی ہو تب بانٹیں، جو درخواست چاہیں قبول کریں اور جب چاہیں روک دیں۔' },
         ],
       },
@@ -515,7 +515,7 @@ export const blogIntro: Record<
   { h1: string; intro: string; minRead: string; published: string; related: string; latest: string; allPosts: string }
 > = {
   en: {
-    h1: 'The FoodShare blog',
+    h1: 'The Itaam blog',
     intro: 'Ideas and guides on sharing food with neighbours, using leftovers well and wasting less.',
     minRead: 'min read',
     published: 'Published',
@@ -524,7 +524,7 @@ export const blogIntro: Record<
     allPosts: 'All posts',
   },
   ur: {
-    h1: 'فوڈ شیئر بلاگ',
+    h1: 'اطعام بلاگ',
     intro: 'پڑوسیوں کے ساتھ کھانا بانٹنے، بچے ہوئے کھانے کے اچھے استعمال اور کم ضیاع کے بارے میں خیالات اور رہنمائی۔',
     minRead: 'منٹ کا مطالعہ',
     published: 'شائع شدہ',
@@ -537,19 +537,19 @@ export const blogIntro: Record<
 export const faqIntro: Record<Language, { h1: string; intro: string }> = {
   en: {
     h1: 'Frequently asked questions',
-    intro: 'Everything you need to know about sharing and picking up free food on FoodShare.',
+    intro: 'Everything you need to know about sharing and picking up free food on Itaam.',
   },
   ur: {
     h1: 'عام سوالات',
-    intro: 'فوڈ شیئر پر مفت کھانا بانٹنے اور حاصل کرنے کے بارے میں ضروری معلومات۔',
+    intro: 'اطعام پر مفت کھانا بانٹنے اور حاصل کرنے کے بارے میں ضروری معلومات۔',
   },
 };
 
 export const faqItems: Record<Language, FaqItem[]> = {
   en: [
     {
-      q: 'Is FoodShare free?',
-      a: 'Yes. FoodShare is free to use, and food shared on FoodShare is always given away for free. There are no fees for sharing or picking up.',
+      q: 'Is Itaam free?',
+      a: 'Yes. Itaam is free to use, and food shared on Itaam is always given away for free. There are no fees for sharing or picking up.',
     },
     {
       q: 'Who can share food?',
@@ -580,22 +580,22 @@ export const faqItems: Record<Language, FaqItem[]> = {
       a: 'No. You choose the pickup spot you pin on the map. It can be your door, your building entrance or a nearby landmark.',
     },
     {
-      q: 'Is FoodShare safe?',
+      q: 'Is Itaam safe?',
       a: 'Every pickup is confirmed with a unique code, pickups can be rated, and anyone can be reported or blocked. Reports are reviewed by our team. Follow our food safety tips and choose a pickup spot you are comfortable with.',
     },
     {
-      q: 'Can I use FoodShare in Urdu?',
-      a: 'Yes. FoodShare is available in English and Urdu. Switch the language at any time from the language menu.',
+      q: 'Can I use Itaam in Urdu?',
+      a: 'Yes. Itaam is available in English and Urdu. Switch the language at any time from the language menu.',
     },
     {
-      q: 'Can I install FoodShare on my phone?',
-      a: 'Yes. FoodShare works in your browser and can be installed on your home screen like an app on Android, iPhone and desktop. No app store download is needed.',
+      q: 'Can I install Itaam on my phone?',
+      a: 'Yes. Itaam works in your browser and can be installed on your home screen like an app on Android, iPhone and desktop. No app store download is needed.',
     },
   ],
   ur: [
     {
-      q: 'کیا فوڈ شیئر مفت ہے؟',
-      a: 'جی ہاں۔ فوڈ شیئر استعمال کرنا مفت ہے، اور اس پر بانٹا گیا کھانا ہمیشہ مفت دیا جاتا ہے۔ بانٹنے یا لینے کی کوئی فیس نہیں۔',
+      q: 'کیا اطعام مفت ہے؟',
+      a: 'جی ہاں۔ اطعام استعمال کرنا مفت ہے، اور اس پر بانٹا گیا کھانا ہمیشہ مفت دیا جاتا ہے۔ بانٹنے یا لینے کی کوئی فیس نہیں۔',
     },
     {
       q: 'کون کھانا بانٹ سکتا ہے؟',
@@ -626,16 +626,16 @@ export const faqItems: Record<Language, FaqItem[]> = {
       a: 'نہیں۔ نقشے پر پک اپ کی جگہ آپ خود چنتے ہیں۔ یہ آپ کا دروازہ، عمارت کا داخلی راستہ یا قریبی نشانی ہو سکتی ہے۔',
     },
     {
-      q: 'کیا فوڈ شیئر محفوظ ہے؟',
+      q: 'کیا اطعام محفوظ ہے؟',
       a: 'ہر وصولی کی تصدیق ایک منفرد کوڈ سے ہوتی ہے، درجہ بندی کی جا سکتی ہے، اور کسی کو بھی رپورٹ یا بلاک کیا جا سکتا ہے۔ ہماری ٹیم رپورٹس کا جائزہ لیتی ہے۔ کھانے کی حفاظت کی تجاویز پر عمل کریں اور ایسی پک اپ جگہ چنیں جہاں آپ مطمئن ہوں۔',
     },
     {
-      q: 'کیا میں فوڈ شیئر اردو میں استعمال کر سکتا ہوں؟',
-      a: 'جی ہاں۔ فوڈ شیئر انگریزی اور اردو میں دستیاب ہے۔ زبان کے مینو سے کسی بھی وقت زبان بدلیں۔',
+      q: 'کیا میں اطعام اردو میں استعمال کر سکتا ہوں؟',
+      a: 'جی ہاں۔ اطعام انگریزی اور اردو میں دستیاب ہے۔ زبان کے مینو سے کسی بھی وقت زبان بدلیں۔',
     },
     {
-      q: 'کیا میں فوڈ شیئر اپنے فون پر انسٹال کر سکتا ہوں؟',
-      a: 'جی ہاں۔ فوڈ شیئر براؤزر میں چلتا ہے اور اینڈرائیڈ، آئی فون اور کمپیوٹر پر ایپ کی طرح ہوم اسکرین پر انسٹال ہو سکتا ہے۔ ایپ اسٹور سے ڈاؤن لوڈ کی ضرورت نہیں۔',
+      q: 'کیا میں اطعام اپنے فون پر انسٹال کر سکتا ہوں؟',
+      a: 'جی ہاں۔ اطعام براؤزر میں چلتا ہے اور اینڈرائیڈ، آئی فون اور کمپیوٹر پر ایپ کی طرح ہوم اسکرین پر انسٹال ہو سکتا ہے۔ ایپ اسٹور سے ڈاؤن لوڈ کی ضرورت نہیں۔',
     },
   ],
 };
@@ -647,10 +647,10 @@ export const publicChrome: Record<
 > = {
   en: {
     tagline: 'Share food, share love',
-    footerAbout: 'FoodShare is a free app for sharing spare home-cooked food with people nearby.',
+    footerAbout: 'Itaam is a free app for sharing spare home-cooked food with people nearby.',
     languageLinkLabel: 'اردو میں پڑھیں',
     ctaTitle: 'Got a plate to spare? Someone nearby would love it.',
-    ctaText: 'Join FoodShare for free and start sharing food with your neighbours today.',
+    ctaText: 'Join Itaam for free and start sharing food with your neighbours today.',
     ctaShare: 'Share food',
     ctaFind: 'Find free food near me',
     notFoundTitle: 'Page not found',
@@ -659,10 +659,10 @@ export const publicChrome: Record<
   },
   ur: {
     tagline: 'کھانا بانٹیں، پیار بانٹیں',
-    footerAbout: 'فوڈ شیئر قریبی لوگوں کے ساتھ اضافی گھر کا کھانا بانٹنے کی ایک مفت ایپ ہے۔',
+    footerAbout: 'اطعام قریبی لوگوں کے ساتھ اضافی گھر کا کھانا بانٹنے کی ایک مفت ایپ ہے۔',
     languageLinkLabel: 'Read in English',
     ctaTitle: 'ایک پلیٹ اضافی ہے؟ قریب کوئی اسے خوشی سے لے گا۔',
-    ctaText: 'فوڈ شیئر میں مفت شامل ہوں اور آج ہی اپنے پڑوسیوں کے ساتھ کھانا بانٹنا شروع کریں۔',
+    ctaText: 'اطعام میں مفت شامل ہوں اور آج ہی اپنے پڑوسیوں کے ساتھ کھانا بانٹنا شروع کریں۔',
     ctaShare: 'کھانا بانٹیں',
     ctaFind: 'اپنے قریب مفت کھانا تلاش کریں',
     notFoundTitle: 'صفحہ نہیں ملا',

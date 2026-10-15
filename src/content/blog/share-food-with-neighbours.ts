@@ -34,7 +34,7 @@ const post: BlogPost = {
     {
       heading: 'Step 3: Post it',
       paragraphs: [
-        'On [FoodShare](/) a post takes less than a minute. Say what the food is, how many people it serves and how long it is available, then pin a pickup spot on the map. Your door, the gate of your building or a nearby landmark all work. You do not have to share your full address.',
+        'On [Itaam](/) a post takes less than a minute. Say what the food is, how many people it serves and how long it is available, then pin a pickup spot on the map. Your door, the gate of your building or a nearby landmark all work. You do not have to share your full address.',
       ],
     },
     {

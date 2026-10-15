@@ -11,8 +11,8 @@ export default defineConfig({
       includeAssets: ['food-icon.svg', 'favicon-32x32.png', 'apple-touch-icon.png'],
       manifest: {
         id: '/',
-        name: 'FoodShare - Share Food, Share Love',
-        short_name: 'FoodShare',
+        name: 'Itaam - Share Food, Share Love',
+        short_name: 'Itaam',
         description: 'Share free home-cooked food with your neighbours. Find free food near you on a live map.',
         lang: 'en',
         categories: ['food', 'lifestyle', 'social'],

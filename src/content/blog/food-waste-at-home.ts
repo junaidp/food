@@ -50,7 +50,7 @@ const post: BlogPost = {
     {
       heading: 'Sharing: the easiest win',
       paragraphs: [
-        'Storing, freezing and planning all help, but sometimes you simply have more than your household will eat. That is exactly what [FoodShare](/) is for. Post the spare plate, and someone a few streets away picks it up for free. Nothing is wasted, and someone eats well.',
+        'Storing, freezing and planning all help, but sometimes you simply have more than your household will eat. That is exactly what [Itaam](/) is for. Post the spare plate, and someone a few streets away picks it up for free. Nothing is wasted, and someone eats well.',
         '[Start sharing for free](/register?role=donor), or read more [about our mission](/about).',
       ],
     },

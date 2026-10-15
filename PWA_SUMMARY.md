@@ -1,8 +1,8 @@
-# 🎉 FoodShare is now a Progressive Web App!
+# 🎉 Itaam is now a Progressive Web App!
 
 ## What Changed
 
-Your FoodShare app has been successfully converted to a PWA. Here's what was added:
+Your Itaam app has been successfully converted to a PWA. Here's what was added:
 
 ### ✅ Files Created/Modified
 
@@ -107,20 +107,20 @@ node -e "require('sharp')('public/food-icon.svg').resize(512,512).png().toFile('
 Share these instructions with your users:
 
 ### Android
-1. Open FoodShare in Chrome
+1. Open Itaam in Chrome
 2. Tap the install banner when it appears
 3. Or tap menu (⋮) → "Install app"
 4. App will appear on your home screen
 
 ### iOS
-1. Open FoodShare in Safari
+1. Open Itaam in Safari
 2. Tap the Share button (□↑)
 3. Scroll and tap "Add to Home Screen"
 4. Tap "Add"
 5. App will appear on your home screen
 
 ### Desktop
-1. Open FoodShare in Chrome or Edge
+1. Open Itaam in Chrome or Edge
 2. Look for install icon (⊕) in address bar
 3. Click it and confirm
 4. App opens in its own window
@@ -139,8 +139,8 @@ Edit `src/components/InstallPrompt.tsx` to customize the UI
 ### Update App Name
 Edit `vite.config.ts`:
 ```typescript
-name: 'FoodShare - Share Food, Share Love'
-short_name: 'FoodShare'
+name: 'Itaam - Share Food, Share Love'
+short_name: 'Itaam'
 ```
 
 ## Troubleshooting
@@ -187,4 +187,4 @@ short_name: 'FoodShare'
 
 ---
 
-**Your FoodShare app is now ready to be installed on any device! 📱✨**
+**Your Itaam app is now ready to be installed on any device! 📱✨**
