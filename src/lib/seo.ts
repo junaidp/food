@@ -1,6 +1,7 @@
 import type { Language } from './translations';
 import { t } from './translations';
 import { pageText, faqItems, type PublicPage } from '../content/publicContent';
+import { BLOG_POSTS, blogPostPath, postsFor, type BlogPost } from '../content/blog';
 
 // Set VITE_SITE_URL to the production origin (no trailing slash) before building.
 export const SITE_URL = (import.meta.env.VITE_SITE_URL || 'https://foodshare.example.com').replace(/\/+$/, '');
@@ -15,6 +16,8 @@ const PAGE_PATHS: Record<PublicPage, string> = {
   faq: '/faq',
   about: '/about',
   foodSafety: '/food-safety',
+  forBusinesses: '/for-businesses',
+  blog: '/blog',
 };
 
 export const PUBLIC_PAGES = Object.keys(PAGE_PATHS) as PublicPage[];
@@ -25,24 +28,32 @@ export function localizedPath(page: PublicPage, lang: Language): string {
   return base === '/' ? `/${lang}` : `/${lang}${base}`;
 }
 
+// Static pages exist in every language; blog posts exist only in the language they were written in.
+export type RouteKind = PublicPage | 'blogPost';
+
 export interface PublicRoute {
   path: string;
-  page: PublicPage;
+  page: RouteKind;
   lang: Language;
+  post?: BlogPost;
 }
 
-export const PUBLIC_ROUTES: PublicRoute[] = LANGUAGES.flatMap((lang) =>
-  PUBLIC_PAGES.map((page) => ({ path: localizedPath(page, lang), page, lang }))
-);
+export const PUBLIC_ROUTES: PublicRoute[] = [
+  ...LANGUAGES.flatMap((lang) => PUBLIC_PAGES.map((page) => ({ path: localizedPath(page, lang), page, lang }))),
+  ...BLOG_POSTS.map((post): PublicRoute => ({ path: blogPostPath(post), page: 'blogPost', lang: post.lang, post })),
+];
 
 export function matchPublicRoute(pathname: string): PublicRoute | null {
   return PUBLIC_ROUTES.find((r) => r.path === pathname) ?? null;
 }
 
-// The same public page in another language, or null when the path isn't a public page.
+// The same public page in another language (a post falls back to that language's blog index),
+// or null when the path isn't a public page.
 export function alternatePath(pathname: string, lang: Language): string | null {
   const route = matchPublicRoute(pathname);
-  return route ? localizedPath(route.page, lang) : null;
+  if (!route) return null;
+  if (route.page === 'blogPost') return route.lang === lang ? pathname : localizedPath('blog', lang);
+  return localizedPath(route.page, lang);
 }
 
 const OG_LOCALE: Record<Language, string> = { en: 'en_US', ur: 'ur_PK' };
@@ -56,18 +67,56 @@ export interface PageMeta {
 }
 
 const absolute = (path: string) => `${SITE_URL}${path === '/' ? '/' : path}`;
+const ORG_ID = `${SITE_URL}/#organization`;
+
+function breadcrumbs(lang: Language, trail: { name: string; path: string }[]) {
+  return {
+    '@type': 'BreadcrumbList',
+    itemListElement: [{ name: pageText.home[lang].navLabel, path: localizedPath('home', lang) }, ...trail].map((c, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: c.name,
+      item: absolute(c.path),
+    })),
+  };
+}
 
 function structuredData(route: PublicRoute) {
-  const { page, lang } = route;
+  const { lang } = route;
   const url = absolute(route.path);
-  const orgId = `${SITE_URL}/#organization`;
   const graph: object[] = [];
+
+  if (route.page === 'blogPost' && route.post) {
+    const post = route.post;
+    graph.push(
+      breadcrumbs(lang, [
+        { name: pageText.blog[lang].navLabel, path: localizedPath('blog', lang) },
+        { name: post.title, path: route.path },
+      ]),
+      {
+        '@type': 'BlogPosting',
+        headline: post.title,
+        description: post.description,
+        inLanguage: lang,
+        datePublished: post.datePublished,
+        dateModified: post.dateModified ?? post.datePublished,
+        mainEntityOfPage: url,
+        image: absolute(OG_IMAGE.path),
+        author: { '@id': ORG_ID },
+        publisher: { '@id': ORG_ID },
+      },
+      { '@type': 'Organization', '@id': ORG_ID, name: SITE_NAME, url: absolute('/'), logo: absolute('/pwa-512x512.png') }
+    );
+    return { '@context': 'https://schema.org', '@graph': graph };
+  }
+
+  const page = route.page as PublicPage;
 
   if (page === 'home') {
     graph.push(
       {
         '@type': 'Organization',
-        '@id': orgId,
+        '@id': ORG_ID,
         name: SITE_NAME,
         url: absolute('/'),
         logo: absolute('/pwa-512x512.png'),
@@ -79,7 +128,7 @@ function structuredData(route: PublicRoute) {
         name: SITE_NAME,
         url: absolute('/'),
         inLanguage: LANGUAGES,
-        publisher: { '@id': orgId },
+        publisher: { '@id': ORG_ID },
       },
       {
         '@type': 'WebApplication',
@@ -91,17 +140,11 @@ function structuredData(route: PublicRoute) {
         description: pageText.home[lang].description,
         inLanguage: lang,
         offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-        publisher: { '@id': orgId },
+        publisher: { '@id': ORG_ID },
       }
     );
   } else {
-    graph.push({
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: pageText.home[lang].navLabel, item: absolute(localizedPath('home', lang)) },
-        { '@type': 'ListItem', position: 2, name: pageText[page][lang].navLabel, item: url },
-      ],
-    });
+    graph.push(breadcrumbs(lang, [{ name: pageText[page][lang].navLabel, path: route.path }]));
   }
 
   if (page === 'faq') {
@@ -112,6 +155,22 @@ function structuredData(route: PublicRoute) {
         '@type': 'Question',
         name: item.q,
         acceptedAnswer: { '@type': 'Answer', text: item.a },
+      })),
+    });
+  }
+
+  if (page === 'blog') {
+    graph.push({
+      '@type': 'Blog',
+      name: pageText.blog[lang].title,
+      url,
+      inLanguage: lang,
+      publisher: { '@id': ORG_ID },
+      blogPost: postsFor(lang).map((p) => ({
+        '@type': 'BlogPosting',
+        headline: p.title,
+        url: absolute(blogPostPath(p)),
+        datePublished: p.datePublished,
       })),
     });
   }
@@ -140,36 +199,50 @@ export function getPageMeta(pathname: string, uiLang: Language): PageMeta {
     };
   }
 
-  const { page, lang } = route;
-  const { title, description } = pageText[page][lang];
+  const { lang, post } = route;
+  const { title, description } = post
+    ? { title: post.metaTitle, description: post.description }
+    : pageText[route.page as PublicPage][lang];
   const url = absolute(route.path);
   const image = absolute(OG_IMAGE.path);
+
+  // hreflang only links real translations, so single-language posts get none.
+  const alternates: HeadTag[] = post
+    ? []
+    : [
+        ...LANGUAGES.map((l): HeadTag => ({
+          tag: 'link',
+          attrs: { rel: 'alternate', hreflang: l, href: absolute(localizedPath(route.page as PublicPage, l)) },
+        })),
+        {
+          tag: 'link',
+          attrs: { rel: 'alternate', hreflang: 'x-default', href: absolute(localizedPath(route.page as PublicPage, 'en')) },
+        },
+      ];
 
   const tags: HeadTag[] = [
     { tag: 'meta', attrs: { name: 'description', content: description } },
     { tag: 'meta', attrs: { name: 'robots', content: 'index, follow, max-image-preview:large' } },
     { tag: 'link', attrs: { rel: 'canonical', href: url } },
-    ...LANGUAGES.map((l): HeadTag => ({
-      tag: 'link',
-      attrs: { rel: 'alternate', hreflang: l, href: absolute(localizedPath(page, l)) },
-    })),
-    { tag: 'link', attrs: { rel: 'alternate', hreflang: 'x-default', href: absolute(localizedPath(page, 'en')) } },
-    { tag: 'meta', attrs: { property: 'og:type', content: 'website' } },
+    ...alternates,
+    { tag: 'meta', attrs: { property: 'og:type', content: post ? 'article' : 'website' } },
     { tag: 'meta', attrs: { property: 'og:site_name', content: SITE_NAME } },
-    { tag: 'meta', attrs: { property: 'og:title', content: title } },
+    { tag: 'meta', attrs: { property: 'og:title', content: post?.title ?? title } },
     { tag: 'meta', attrs: { property: 'og:description', content: description } },
     { tag: 'meta', attrs: { property: 'og:url', content: url } },
     { tag: 'meta', attrs: { property: 'og:locale', content: OG_LOCALE[lang] } },
-    ...LANGUAGES.filter((l) => l !== lang).map((l): HeadTag => ({
-      tag: 'meta',
-      attrs: { property: 'og:locale:alternate', content: OG_LOCALE[l] },
-    })),
+    ...(post
+      ? [{ tag: 'meta', attrs: { property: 'article:published_time', content: post.datePublished } } as HeadTag]
+      : LANGUAGES.filter((l) => l !== lang).map((l): HeadTag => ({
+          tag: 'meta',
+          attrs: { property: 'og:locale:alternate', content: OG_LOCALE[l] },
+        }))),
     { tag: 'meta', attrs: { property: 'og:image', content: image } },
     { tag: 'meta', attrs: { property: 'og:image:width', content: String(OG_IMAGE.width) } },
     { tag: 'meta', attrs: { property: 'og:image:height', content: String(OG_IMAGE.height) } },
     { tag: 'meta', attrs: { property: 'og:image:alt', content: pageText.home[lang].title } },
     { tag: 'meta', attrs: { name: 'twitter:card', content: 'summary_large_image' } },
-    { tag: 'meta', attrs: { name: 'twitter:title', content: title } },
+    { tag: 'meta', attrs: { name: 'twitter:title', content: post?.title ?? title } },
     { tag: 'meta', attrs: { name: 'twitter:description', content: description } },
     { tag: 'meta', attrs: { name: 'twitter:image', content: image } },
     {
@@ -210,19 +283,21 @@ export function applyPageMeta(meta: PageMeta) {
   }
 }
 
-export function buildSitemap(lastmod: string): string {
+export function buildSitemap(buildDate: string): string {
   const urls = PUBLIC_ROUTES.map((route) => {
-    const alternates = LANGUAGES.map(
-      (l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${absolute(localizedPath(route.page, l))}" />`
-    ).join('\n');
-    return [
-      '  <url>',
-      `    <loc>${absolute(route.path)}</loc>`,
-      `    <lastmod>${lastmod}</lastmod>`,
-      alternates,
-      `    <xhtml:link rel="alternate" hreflang="x-default" href="${absolute(localizedPath(route.page, 'en'))}" />`,
-      '  </url>',
-    ].join('\n');
+    const lines = ['  <url>', `    <loc>${absolute(route.path)}</loc>`];
+    if (route.post) {
+      lines.push(`    <lastmod>${route.post.dateModified ?? route.post.datePublished}</lastmod>`);
+    } else {
+      const page = route.page as PublicPage;
+      lines.push(`    <lastmod>${buildDate}</lastmod>`);
+      for (const l of LANGUAGES) {
+        lines.push(`    <xhtml:link rel="alternate" hreflang="${l}" href="${absolute(localizedPath(page, l))}" />`);
+      }
+      lines.push(`    <xhtml:link rel="alternate" hreflang="x-default" href="${absolute(localizedPath(page, 'en'))}" />`);
+    }
+    lines.push('  </url>');
+    return lines.join('\n');
   });
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',

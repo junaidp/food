@@ -94,6 +94,19 @@ This starts both frontend (port 5173) and backend (port 3001).
 - Phone: `03001234567`
 - Password: `admin123`
 
+## SEO & public pages
+
+Public pages (home, how it works, FAQ, about, food safety, for businesses, blog) are
+pre-rendered to static HTML at build time (`scripts/prerender.mjs`), in English (`/faq`)
+and Urdu (`/ur/faq`). The build also writes `sitemap.xml` and `robots.txt`.
+
+- Set `VITE_SITE_URL` (e.g. `https://your-domain.com`) in the build environment — it is
+  used for canonical URLs, the sitemap and social previews.
+- Page copy lives in `src/content/publicContent.ts`; titles and meta tags in `src/lib/seo.ts`.
+- **Add a blog post:** create a file in `src/content/blog/` (copy an existing post), add it
+  to `BLOG_POSTS` in `src/content/blog/index.ts`, and rebuild. Links inside text use
+  `[label](/path)`. Set `lang: 'ur'` for an Urdu post (served at `/ur/blog/<slug>`).
+
 ## Deployment (Render)
 
 1. Push to GitHub

@@ -3,7 +3,7 @@ import type { Language } from '../lib/translations';
 // Copy for the public, indexable pages (landing excluded — its strings live in translations.ts).
 // Keep English and Urdu in sync: both versions are pre-rendered and linked with hreflang.
 
-export type PublicPage = 'home' | 'howItWorks' | 'faq' | 'about' | 'foodSafety';
+export type PublicPage = 'home' | 'howItWorks' | 'faq' | 'about' | 'foodSafety' | 'forBusinesses' | 'blog';
 
 export interface PageText {
   navLabel: string;
@@ -98,6 +98,34 @@ export const pageText: Record<PublicPage, Record<Language, PageText>> = {
       title: 'گھر کا کھانا محفوظ طریقے سے بانٹنے کی تجاویز | فوڈ شیئر',
       description:
         'کھانا محفوظ طریقے سے کیسے بانٹیں اور وصول کریں: کیا بانٹیں، کیسے پیک اور لیبل کریں، پکا ہوا کھانا کب تک ٹھیک رہتا ہے، الرجی اور محفوظ پک اپ کی آسان تجاویز۔',
+    },
+  },
+  forBusinesses: {
+    en: {
+      navLabel: 'For businesses',
+      title: 'Share Surplus Food From Your Restaurant, Café or Event | FoodShare',
+      description:
+        'Restaurants, bakeries, caterers and event venues: give surplus food to people nearby for free instead of throwing it away. Post in a minute, hand over with a pickup code.',
+    },
+    ur: {
+      navLabel: 'کاروبار کے لیے',
+      title: 'اپنے ریسٹورنٹ، بیکری یا تقریب کا اضافی کھانا بانٹیں | فوڈ شیئر',
+      description:
+        'ریسٹورنٹ، بیکری، کیٹرر اور شادی ہال: اضافی کھانا پھینکنے کے بجائے قریبی لوگوں کو مفت دیں۔ ایک منٹ میں پوسٹ کریں اور پک اپ کوڈ کے ساتھ حوالے کریں۔',
+    },
+  },
+  blog: {
+    en: {
+      navLabel: 'Blog',
+      title: 'FoodShare Blog – Food Sharing, Leftovers and Reducing Food Waste',
+      description:
+        'Guides and ideas on sharing food with neighbours, finding free food near you, using leftovers and reducing food waste at home, from the FoodShare team.',
+    },
+    ur: {
+      navLabel: 'بلاگ',
+      title: 'فوڈ شیئر بلاگ – کھانا بانٹنا، بچا ہوا کھانا اور ضیاع میں کمی',
+      description:
+        'پڑوسیوں کے ساتھ کھانا بانٹنے، اپنے قریب مفت کھانا تلاش کرنے، بچے ہوئے کھانے کے استعمال اور ضیاع کم کرنے کے بارے میں رہنمائی اور خیالات۔',
     },
   },
 };
@@ -388,6 +416,121 @@ export const foodSafetyContent: Record<Language, ContentPageText> = {
         paragraphs: ['یہ تجاویز عمومی رہنمائی ہیں۔ براہ کرم اپنے علاقے کے کھانے کی حفاظت کے قوانین پر بھی عمل کریں۔'],
       },
     ],
+  },
+};
+
+export const forBusinessesContent: Record<Language, ContentPageText> = {
+  en: {
+    h1: 'Share surplus food from your restaurant, café or event',
+    intro:
+      'Restaurants, bakeries, caterers, hotels and event venues end most days with good food that will not be sold. FoodShare lets you give it to people nearby for free in a minute, instead of putting it in the bin.',
+    sections: [
+      {
+        heading: 'Why share your surplus',
+        items: [
+          { title: 'Less waste', text: 'Unsold food is eaten instead of thrown away, which also means fewer bags in your bins.' },
+          { title: 'Good for your community', text: 'Your neighbours eat well and remember who shared with them.' },
+          { title: 'No cost, no paperwork', text: 'FoodShare is free. There are no fees, contracts or collection schedules.' },
+          { title: 'You stay in control', text: 'Share when you have surplus, accept the requests you want and stop at any time.' },
+        ],
+      },
+      {
+        heading: 'What businesses share',
+        items: [
+          { text: 'Unsold bread, naan, cakes and pastries at closing time.' },
+          { text: 'Prepared meals and trays that never reached the counter or buffet.' },
+          { text: 'Untouched surplus from weddings, conferences and catered events.' },
+          { text: 'Sealed packaged food and drinks before their use-by date.' },
+        ],
+      },
+      {
+        heading: 'How it works',
+        ordered: true,
+        items: [
+          { title: 'Create a free sharing account', text: 'Sign up with your phone number and choose to share food.' },
+          { title: 'Post your surplus', text: 'Say what it is, how many servings you have and the pickup window. Pin your shop or venue on the map.' },
+          { title: 'Accept requests', text: 'People nearby request servings. Servings left update automatically as you accept.' },
+          { title: 'Hand over at the counter', text: 'Each person shows a 6-digit pickup code, which you confirm in the app.' },
+        ],
+      },
+      {
+        heading: 'Tips for businesses',
+        items: [
+          { text: 'Post 30 to 60 minutes before closing so people have time to arrive.' },
+          { text: 'Pack food in single portions so it is quick to hand over.' },
+          { text: 'Label dishes and mention common allergens.' },
+          { text: 'Follow the food safety rules that apply to your business, and our food safety tips.' },
+        ],
+      },
+    ],
+  },
+  ur: {
+    h1: 'اپنے ریسٹورنٹ، بیکری یا تقریب کا اضافی کھانا بانٹیں',
+    intro:
+      'ریسٹورنٹ، بیکری، کیٹرر، ہوٹل اور شادی ہال اکثر دن کے آخر میں ایسا اچھا کھانا رکھتے ہیں جو بکے گا نہیں۔ فوڈ شیئر کے ذریعے آپ اسے کوڑے میں ڈالنے کے بجائے ایک منٹ میں قریبی لوگوں کو مفت دے سکتے ہیں۔',
+    sections: [
+      {
+        heading: 'اضافی کھانا کیوں بانٹیں',
+        items: [
+          { title: 'کم ضیاع', text: 'نہ بکنے والا کھانا پھینکنے کے بجائے کھایا جاتا ہے۔' },
+          { title: 'کمیونٹی کے لیے اچھا', text: 'آپ کے پڑوسی اچھا کھاتے ہیں اور یاد رکھتے ہیں کہ کس نے بانٹا۔' },
+          { title: 'کوئی خرچ یا کاغذی کارروائی نہیں', text: 'فوڈ شیئر مفت ہے۔ نہ فیس، نہ معاہدہ، نہ وصولی کا شیڈول۔' },
+          { title: 'اختیار آپ کے پاس', text: 'جب اضافی ہو تب بانٹیں، جو درخواست چاہیں قبول کریں اور جب چاہیں روک دیں۔' },
+        ],
+      },
+      {
+        heading: 'کاروبار کیا بانٹتے ہیں',
+        items: [
+          { text: 'بند ہونے کے وقت نہ بکنے والی روٹی، نان، کیک اور پیسٹری۔' },
+          { text: 'تیار کھانا اور ٹرے جو کاؤنٹر یا بوفے تک نہیں پہنچیں۔' },
+          { text: 'شادیوں، کانفرنسوں اور تقریبات کا اچھوتا اضافی کھانا۔' },
+          { text: 'میعاد ختم ہونے سے پہلے کا بند پیکٹ والا کھانا اور مشروبات۔' },
+        ],
+      },
+      {
+        heading: 'یہ کیسے کام کرتا ہے',
+        ordered: true,
+        items: [
+          { title: 'مفت اکاؤنٹ بنائیں', text: 'اپنے فون نمبر سے سائن اپ کریں اور کھانا بانٹنے کا انتخاب کریں۔' },
+          { title: 'اضافی کھانا پوسٹ کریں', text: 'بتائیں کیا ہے، کتنے حصے ہیں اور کب تک لیا جا سکتا ہے۔ نقشے پر اپنی دکان یا ہال لگائیں۔' },
+          { title: 'درخواستیں قبول کریں', text: 'قریبی لوگ حصوں کی درخواست کرتے ہیں۔ باقی حصے خود بخود اپ ڈیٹ ہوتے ہیں۔' },
+          { title: 'کاؤنٹر پر حوالے کریں', text: 'ہر شخص 6 ہندسوں کا پک اپ کوڈ دکھاتا ہے جس کی آپ ایپ میں تصدیق کرتے ہیں۔' },
+        ],
+      },
+      {
+        heading: 'کاروبار کے لیے تجاویز',
+        items: [
+          { text: 'بند ہونے سے 30 سے 60 منٹ پہلے پوسٹ کریں تاکہ لوگ وقت پر پہنچ سکیں۔' },
+          { text: 'کھانا ایک ایک حصے میں پیک کریں تاکہ جلدی حوالے ہو۔' },
+          { text: 'کھانوں پر لیبل لگائیں اور عام الرجی والی چیزیں بتائیں۔' },
+          { text: 'اپنے کاروبار پر لاگو کھانے کی حفاظت کے قوانین اور ہماری تجاویز پر عمل کریں۔' },
+        ],
+      },
+    ],
+  },
+};
+
+export const blogIntro: Record<
+  Language,
+  { h1: string; intro: string; minRead: string; published: string; related: string; latest: string; allPosts: string }
+> = {
+  en: {
+    h1: 'The FoodShare blog',
+    intro: 'Ideas and guides on sharing food with neighbours, using leftovers well and wasting less.',
+    minRead: 'min read',
+    published: 'Published',
+    related: 'More from the blog',
+    latest: 'From the blog',
+    allPosts: 'All posts',
+  },
+  ur: {
+    h1: 'فوڈ شیئر بلاگ',
+    intro: 'پڑوسیوں کے ساتھ کھانا بانٹنے، بچے ہوئے کھانے کے اچھے استعمال اور کم ضیاع کے بارے میں خیالات اور رہنمائی۔',
+    minRead: 'منٹ کا مطالعہ',
+    published: 'شائع شدہ',
+    related: 'بلاگ سے مزید',
+    latest: 'بلاگ سے',
+    allPosts: 'تمام تحریریں',
   },
 };
 

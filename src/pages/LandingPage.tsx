@@ -2,7 +2,9 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { t } from '../lib/translations';
 import { localizedPath } from '../lib/seo';
-import { faqItems, publicChrome } from '../content/publicContent';
+import { faqItems, publicChrome, blogIntro } from '../content/publicContent';
+import { postsFor } from '../content/blog';
+import BlogPostCard from '../components/BlogPostCard';
 import PublicLayout, { JoinCta } from '../components/PublicLayout';
 import { Heart, MapPin, Shield, HandCoins, ArrowRight } from 'lucide-react';
 
@@ -118,6 +120,21 @@ export default function LandingPage() {
           <div className="text-center">
             <Link to={localizedPath('faq', lang)} className="inline-block mt-8 text-primary-700 font-medium hover:underline">
               {t('landingAllQuestions', lang)}
+            </Link>
+          </div>
+        </section>
+
+        {/* Latest posts */}
+        <section className="mt-24">
+          <h2 className="text-3xl font-bold mb-8 text-center">{blogIntro[lang].latest}</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            {postsFor(lang).slice(0, 3).map((post) => (
+              <BlogPostCard key={post.slug} post={post} lang={lang} />
+            ))}
+          </div>
+          <div className="text-center">
+            <Link to={localizedPath('blog', lang)} className="inline-block mt-8 text-primary-700 font-medium hover:underline">
+              {blogIntro[lang].allPosts}
             </Link>
           </div>
         </section>

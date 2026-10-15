@@ -2,12 +2,13 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { t } from '../lib/translations';
-import { localizedPath, matchPublicRoute } from '../lib/seo';
+import { localizedPath, alternatePath } from '../lib/seo';
 import { pageText, publicChrome, type PublicPage } from '../content/publicContent';
 import LanguageSelector from './LanguageSelector';
 import { ArrowRight } from 'lucide-react';
 
-const NAV_PAGES: PublicPage[] = ['howItWorks', 'faq', 'foodSafety', 'about'];
+const NAV_PAGES: PublicPage[] = ['howItWorks', 'faq', 'foodSafety', 'blog', 'about'];
+const FOOTER_PAGES: PublicPage[] = ['home', ...NAV_PAGES, 'forBusinesses'];
 
 export function JoinCta() {
   const { lang } = useLanguage();
@@ -35,9 +36,8 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
   const { lang } = useLanguage();
   const { pathname } = useLocation();
   const chrome = publicChrome[lang];
-  const route = matchPublicRoute(pathname);
   const otherLang = lang === 'en' ? 'ur' : 'en';
-  const otherLangHref = localizedPath(route?.page ?? 'home', otherLang);
+  const otherLangHref = alternatePath(pathname, otherLang) ?? localizedPath('home', otherLang);
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-primary-50 via-white to-warmOrange-50">
@@ -75,7 +75,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
             <p className="text-gray-500">{chrome.footerAbout}</p>
           </div>
           <ul className="space-y-2">
-            {(['home', ...NAV_PAGES] as PublicPage[]).map((page) => (
+            {FOOTER_PAGES.map((page) => (
               <li key={page}>
                 <Link to={localizedPath(page, lang)} className="text-gray-600 hover:text-primary-700">
                   {pageText[page][lang].navLabel}
