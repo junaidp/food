@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../lib/api';
 import { useLanguage } from '../context/LanguageContext';
 import { t } from '../lib/translations';
@@ -9,7 +9,8 @@ export default function RegisterPage() {
   const [phone, setPhone] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState<'donor' | 'receiver'>('receiver');
+  const [searchParams] = useSearchParams();
+  const [role, setRole] = useState<'donor' | 'receiver'>(searchParams.get('role') === 'donor' ? 'donor' : 'receiver');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { lang } = useLanguage();

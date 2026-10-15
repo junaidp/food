@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import { useLanguage } from '../context/LanguageContext';
 import { t } from '../lib/translations';
 import type { FoodListing } from '../../shared/types';

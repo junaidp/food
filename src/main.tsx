@@ -7,7 +7,7 @@ import { NotificationProvider } from './context/NotificationContext';
 import { LanguageProvider } from './context/LanguageContext';
 import './index.css';
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+const app = (
   <React.StrictMode>
     <BrowserRouter>
       <LanguageProvider>
@@ -20,3 +20,14 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     </BrowserRouter>
   </React.StrictMode>
 );
+
+const root = document.getElementById('root')!;
+
+// Hydrate only when this HTML was pre-rendered for this exact URL and the visitor is signed out
+// (signed-in visitors get redirected, so their first render differs from the static markup).
+if (root.dataset.prerendered === window.location.pathname && !localStorage.getItem('token')) {
+  ReactDOM.hydrateRoot(root, app);
+} else {
+  root.innerHTML = '';
+  ReactDOM.createRoot(root).render(app);
+}

@@ -8,11 +8,14 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['food-icon.svg', 'favicon.ico'],
+      includeAssets: ['food-icon.svg', 'favicon-32x32.png', 'apple-touch-icon.png'],
       manifest: {
+        id: '/',
         name: 'FoodShare - Share Food, Share Love',
         short_name: 'FoodShare',
-        description: 'A charity food sharing app connecting donors with receivers in Islamabad',
+        description: 'Share free home-cooked food with your neighbours. Find free food near you on a live map.',
+        lang: 'en',
+        categories: ['food', 'lifestyle', 'social'],
         theme_color: '#10b981',
         background_color: '#ffffff',
         display: 'standalone',
@@ -24,7 +27,7 @@ export default defineConfig({
             src: '/food-icon.svg',
             sizes: 'any',
             type: 'image/svg+xml',
-            purpose: 'any maskable'
+            purpose: 'any'
           },
           {
             src: '/pwa-192x192.png',
@@ -35,11 +38,20 @@ export default defineConfig({
             src: '/pwa-512x512.png',
             sizes: '512x512',
             type: 'image/png'
+          },
+          {
+            src: '/pwa-maskable-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable'
           }
         ]
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2}'],
+        globIgnores: ['**/node_modules/**/*', 'og-image.png'],
+        // Let crawler files and the API reach the network instead of the cached app page.
+        navigateFallbackDenylist: [/^\/api\//, /\.(?:xml|txt)$/],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/api\.*/i,

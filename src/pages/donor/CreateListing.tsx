@@ -6,6 +6,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { t } from '../../lib/translations';
 import { MapPin, Clock, ArrowLeft } from 'lucide-react';
 import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 export default function CreateListing() {
   const navigate = useNavigate();

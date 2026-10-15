@@ -18,7 +18,8 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
-  const [loading, setLoading] = useState(true);
+  // Signed-out visitors render immediately, so pre-rendered public pages hydrate without a spinner flash.
+  const [loading, setLoading] = useState(() => !!localStorage.getItem('token'));
 
   const fetchUser = useCallback(async () => {
     if (!token) {
